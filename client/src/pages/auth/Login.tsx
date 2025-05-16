@@ -4,35 +4,23 @@ import {  useForm } from "react-hook-form"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { loginSchema } from "@/schema";
 
-const formSchema = z.object({
-  firstName: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-    lastName: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-    email: z.string().email(),
-    password: z.string().min(8, {
-      message: "Password must be at least 8 characters.",
-})
 
-})
 
 const Login = () => {
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+   
       email: "",
       password: "",
     },
   })
  
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof loginSchema>) {
     
     console.log(values)
   }

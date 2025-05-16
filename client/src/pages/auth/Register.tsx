@@ -4,26 +4,14 @@ import {  useForm } from "react-hook-form"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import  { registrationSchema } from "@/schema";
 
-const formSchema = z.object({
-  firstName: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-    lastName: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-    email: z.string().email(),
-    password: z.string().min(8, {
-      message: "Password must be at least 8 characters.",
-})
-
-})
 
 
 const Register = () => {
 
-  const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registrationSchema>>({
+      resolver: zodResolver(registrationSchema),
       defaultValues: {
         firstName: "",
         lastName: "",
@@ -33,7 +21,7 @@ const Register = () => {
     })
    
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    function onSubmit(values: z.infer<typeof registrationSchema>) {
       
       console.log(values)
     }
@@ -46,7 +34,6 @@ const Register = () => {
         <p>Manage your parking with ease and book your car's place in the parking</p>
 
       </div>
-      
        <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         
