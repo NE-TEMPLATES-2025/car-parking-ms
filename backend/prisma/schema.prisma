@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
@@ -12,4 +8,67 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+
+enum EROLE {
+  ADMIN
+  USER
+}
+
+
+enum ESlotStatus {
+  AVAILABLE
+  OCCUPIED
+}
+
+enum ESlotType {
+  BIKE
+  CAR
+  EV
+}
+
+model User {
+  id String @id @default(uuid()) 
+  firstName String  @map("first_name")
+  lastName String @map("last_name")
+  email String @map("email") @unique
+  password String @map("password")
+  role EROLE @map("role")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updatedAt")
+
+  vehicles Vehicles[]
+
+  @@map("users")
+}
+
+
+model Vehicles {
+  id String @id @default(uuid())
+ 
+  plateNumber  String @unique @map("plate_number")
+  brand String @map("brand")
+  model String @map("model")
+  color String @map("color")
+
+  createdAt DateTime @default(now())
+
+  userId String
+  user User @relation(fields: [userId],references: [id])
+
+  @@map("vehicles")
+}
+
+model Slots {
+  id String @id @default(uuid())
+  slotNumber String @map("slot_number") @unique
+  status ESlotStatus @map("slot_status")
+  floor Int @map("floor")
+  type ESlotType @map("slot_type")
+
+  createdAt DateTime @default(now())
+
+@@map("parking_slots")
+
 }
