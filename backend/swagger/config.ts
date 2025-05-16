@@ -1,44 +1,40 @@
-import swaggerAutogen from "swagger-autogen";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import { Express } from "express";
 
-
-// Routes
-import authRouter from "../routes/auth.routes"
-import adminRouter from "../routes/admin.routes"
-import userRouter from "../routes/user.routes"
-import slotsRouter from "../routes/slots.routes"
-import vehicleRouter from "../routes/vehicle.routes"
-
-
-
-
-const doc = {
-
-    info:{
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
       title: "Car Parking Management System",
-      description:"APIs for application which involves managing car parks including slots,vehicles,users,etc..."
+      version: "1.0.0",
+      description: "APIs for managing car parks including slots, vehicles, users, etc...",
     },
-   tags: [
-        {
-            name: 'Auth',
-            description: 'Authentication endpoints'
-        },
+    servers: [
+      {
+        url: "http://localhost:5000/api/v1/",
+      },
     ],
+    components: {
+  securitySchemes: {
+    bearerAuth: {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    },
+  },
+},
+security: [
+  {
+    bearerAuth: [],
+  },
+],
+  },
+  apis: ["./routes/*.ts"], // all your route files
+};
 
-    host: "http://localhost:5000",
-    basePath: "/api/v1/",
-    consumes:["application/json"],
-    produces:["application/json"],
+const swaggerSpec = swaggerJSDoc(options);
 
-    securityDefinitions:{
-        bearerAuth: {
-            type: 'apiKey',
-            name: 'Authorization',
-            in: 'header'
-        }
-    }
-}
-
-const outputFile= "./swagger.json";
-const routes= ["../index.ts"];
-
-swaggerAutogen(outputFile,routes,doc);
+export const setupSwagger = (app: Express) => {
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+};

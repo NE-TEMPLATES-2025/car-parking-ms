@@ -9,6 +9,10 @@ import vehicleRouter from "./routes/vehicle.routes"
 import parkingSlotRouter from './routes/slots.routes'
 import swaggerUi from 'swagger-ui-express'
 import swaggerDoc from "./swagger/swagger.json"
+import { setupSwagger } from "./swagger/config";
+
+
+
 
 dotenv.config();
 
@@ -17,7 +21,10 @@ const app= express();
 
 // Third-party middlewares
 
-app.use(cors())
+app.use(cors({
+    methods:["POST","GET","OPTIONS","DELETE","PUT","PATCH"],
+    origin: ["http://localhost:5000"]
+}))
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(express.json())
 
@@ -34,7 +41,7 @@ app.use("/api/v1/slots",parkingSlotRouter)
 
 // Swagger endpoint
 
-app.use("/api/v1/docs",swaggerUi.serve,swaggerUi.setup(swaggerDoc))
+setupSwagger(app);
 
 app.listen(process.env.PORT,()=>{
 console.log(`app running on port ${process.env.PORT} `)
