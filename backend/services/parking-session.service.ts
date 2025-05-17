@@ -71,7 +71,7 @@ const approveParkingSession =async(sessionId: number)=>{
             }
         })
 
-        await prisma.parkingSession.update({
+        const updatedParkingRequest=await prisma.parkingSession.update({
             where:{
                 id: sessionId
             },
@@ -89,6 +89,7 @@ const approveParkingSession =async(sessionId: number)=>{
                 status: "OCCUPIED"
             }
         })
+        return updatedParkingRequest;
         
     } catch (error) {
         console.log(error);
@@ -96,6 +97,24 @@ const approveParkingSession =async(sessionId: number)=>{
         
     }
 
+}
+
+
+const getAllParkingSessions=  async()=>{
+    try {
+        const parkingSessions= await prisma.parkingSession.findMany({
+            orderBy:{
+                createdAt: "desc"
+            },
+            take:5,
+            skip:0
+        })
+        return parkingSessions;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Failed to fetch all parking sessions");
+        
+    }
 }
 
 
@@ -110,7 +129,8 @@ function parseTimeToMinutes(timeStr: string): number {
 const parkingSessionService = {
     bookParkingSession,
     getAllPendingSessions,
-    approveParkingSession
+    approveParkingSession,
+    getAllParkingSessions
 }
 
 export default parkingSessionService;

@@ -22,3 +22,12 @@ export const loginSchema = z.object({
     password: z.string({message: "Password is required"})
 
 })
+
+
+export const bookParkingSessionSchema = z.object({
+    userId: z.string(),
+    slotId: z.string(),
+    date: z.string().min(1),
+    startTime: z.string(),
+    endTime: z.string(),
+})

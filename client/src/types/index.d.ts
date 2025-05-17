@@ -65,3 +65,43 @@ export type SlotsResponse ={
   status: number;
   data:Slot[];
 }
+
+export type ParkingSession= {
+  id:number;
+  slotId:string;
+  userId:string;
+  status:string;
+  startTime:string;
+  endTime:string;
+  date:string;
+  duration:number;
+  totalFee:number;
+
+  createdAt:string;
+  updatedAt:string;
+}
+
+export type RequestParkingSessionResponse ={
+  message: string;
+  status: number
+  data: ParkingSession;
+}
+
+export type GetParkingSessionRequestsResponse ={
+  message: string;
+  status: number;
+  data: ParkingSession[];
+}
+export type ApproveParkingSessionRequestsResponse ={
+  message: string;
+  status: number;
+  data: ParkingSession;
+}
+
+export interface BookParkingSessionDto {
+  userId: string;
+  slotId: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+}

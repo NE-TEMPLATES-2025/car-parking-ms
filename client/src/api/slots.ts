@@ -15,7 +15,6 @@ export const getAllSlots= async()=>{
     }
 }
 
-
 export const deleteParkingSlot =async(id:string)=>{
     try {
         await protectedApiClient.delete(`/slots/delete/${id}`)

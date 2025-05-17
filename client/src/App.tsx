@@ -5,6 +5,7 @@ import Register from './pages/auth/Register';
 import RootLayout from './layout/RootLayout';
 import Dashboard from './pages/Dashboard';
 import useAuthContext from './hooks/useAuthContext';
+import Bookings from './pages/Bookings';
 
 function App() {
   const { user } = useAuthContext();
@@ -17,9 +18,9 @@ function App() {
         {/* Protected routes */}
         <Route element={user ? <RootLayout /> : <Navigate to="/login" replace />}>
           <Route path="/" element={<Dashboard />} />
+          <Route path='/bookings' element={<Bookings/>}/>
         </Route>
 
-        {/* Public routes (login/register) */}
         <Route element={!user ? <AuthLayout /> : <Navigate to="/" replace />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

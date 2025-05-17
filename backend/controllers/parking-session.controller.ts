@@ -27,7 +27,7 @@ export const bookParkingSession = async(req:Request,res:Response)=>{
     }
     }
 
- const getAllParkingSessions = async(req:Request,res:Response)=>{
+ const getAllPendingSessions = async(req:Request,res:Response)=>{
     try {
         const response= await parkingSessionService.getAllPendingSessions();
 
@@ -49,9 +49,9 @@ export const bookParkingSession = async(req:Request,res:Response)=>{
     const sessionId = parseInt(req.params.id);
 
     try {
-         await parkingSessionService.approveParkingSession(sessionId);
+        const response= await parkingSessionService.approveParkingSession(sessionId);
 
-        res.status(200).json(ApiResponse.success("Approved parking session",201)
+        res.status(200).json(ApiResponse.success("Approved parking session",201,response)
     )
     } 
     catch (error) {
@@ -61,9 +61,27 @@ export const bookParkingSession = async(req:Request,res:Response)=>{
     }
 }
 
+const getAllSessions = async(req:Request,res:Response)=>{
+    try {
+        const response= await parkingSessionService.getAllParkingSessions();
+
+        res.status(200).json(
+            ApiResponse.success("Fetched all requested sessions",200,response)
+        )
+        
+    } catch (error:any) {
+        console.log(error);
+        res.status(500).json({
+            message: "Failed to fetch approved sessions",
+            error: error.message
+        })
+    }
+}
+
 const parkingSessionController = {
     bookParkingSession,
-    getAllParkingSessions,
-    approveParkingSession
+    getAllPendingSessions,
+    approveParkingSession,
+    getAllSessions
 }
 export default parkingSessionController;
