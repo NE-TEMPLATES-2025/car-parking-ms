@@ -11,7 +11,7 @@ export const registrationSchema = z.object({
     email: z.string().email(),
     password: z.string().min(8, {
       message: "Password must be at least 8 characters.",
-})
+}).max(30)
 
 })
 
@@ -19,8 +19,6 @@ export const registrationSchema = z.object({
 
 export const loginSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(8, {
-      message: "Password must be at least 8 characters.",
-})
+    password: z.string({message: "Password is required"})
 
 })

@@ -20,9 +20,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import { useDeleteParkingSlotMutation, useGetAllParkingSlots } from "@/lib/react-query/queriesAndMutations";
 
 
 const Dashboard = () => {
+
+  const {data:slots,isFetching:isLoading}= useGetAllParkingSlots();
+
+  const {mutateAsync:deleteSlot,isPending,isError}= useDeleteParkingSlotMutation();
+
   return (
     <div className="w-full flex flex-1 flex-col space-y-6 py-6 px-5">
       <div className="w-full  grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -122,59 +128,38 @@ const Dashboard = () => {
         <h3 className="text-3xl font-semibold">Parking Slots For You</h3>
 
         {/* Table */}
+        {isLoading && <p className="text-sm text-gray-600 text-center">Loading...</p>}
 
         <Table>
           <TableHeader>
+            
             <TableRow>
               <TableHead >Slot Number</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Floor</TableHead>
               <TableHead >Type</TableHead>
+              <TableHead className="text-center">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>A001</TableCell>
-              <TableCell>AVAILABLE</TableCell>
-              <TableCell>2</TableCell>
-              <TableCell>CAR</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>A001</TableCell>
-              <TableCell>AVAILABLE</TableCell>
-              <TableCell>2</TableCell>
-              <TableCell>CAR</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>A001</TableCell>
-              <TableCell>AVAILABLE</TableCell>
-              <TableCell>2</TableCell>
-              <TableCell>CAR</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>A001</TableCell>
-              <TableCell>AVAILABLE</TableCell>
-              <TableCell>2</TableCell>
-              <TableCell>CAR</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>A001</TableCell>
-              <TableCell>AVAILABLE</TableCell>
-              <TableCell>2</TableCell>
-              <TableCell>CAR</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>A001</TableCell>
-              <TableCell>AVAILABLE</TableCell>
-              <TableCell>2</TableCell>
-              <TableCell>CAR</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>A001</TableCell>
-              <TableCell>AVAILABLE</TableCell>
-              <TableCell>2</TableCell>
-              <TableCell>CAR</TableCell>
-            </TableRow>
+            {slots?.map((slot) => (
+              <TableRow key={slot.slotNumber}>
+                <TableCell>{slot.slotNumber}</TableCell>
+                <TableCell>{slot.status}</TableCell>
+                <TableCell>{slot.floor}</TableCell>
+                <TableCell>{slot.type}</TableCell>
+                 <TableCell>
+                  <div className="flex justify-center items-center gap-3">
+                    <Button className="bg-blue-600 text-white rounded-lg px-4 py-2 cursor-pointer">
+                      Assign
+                    </Button>
+                    <Button onClick={()=>deleteSlot(slot.id)} className="bg-red-600 text-white rounded-lg px-4 py-2 cursor-pointer">
+                      Delete
+                    </Button>
+                  </div>
+                  </TableCell>  
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
 

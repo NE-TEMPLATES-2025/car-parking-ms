@@ -43,7 +43,6 @@ const AuthProvider= ({children}:{children:React.ReactNode})=>{
                 email,
                 password
             })
-            console.log(response);
             
             const userData = response.data.data.user
              const token = response.data.data.token;
@@ -66,11 +65,10 @@ const AuthProvider= ({children}:{children:React.ReactNode})=>{
         }
 
     }
-    const logout = async()=>{
-        localStorage.removeItem("authToken");
+    const logout = ()=>{
+        localStorage.removeItem("user");
         setIsAuthenticated(false);
         setUser(null)
-
     }
     return <AuthContext.Provider value={{isAuthenticated,login,logout,user,setUser}}>
         {children}

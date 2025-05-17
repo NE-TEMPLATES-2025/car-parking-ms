@@ -1,6 +1,8 @@
+import useAuthContext from "@/hooks/useAuthContext"
 import { Input } from "./ui/input"
 import { MdSearch} from "react-icons/md"
 const TopBar = () => {
+  const {user}= useAuthContext();
   return (
     <div className="w-full h-[70px] bg-white flex px-6 justify-between items-center">
             <div className="w-[300px] h-[30px] relative flex items-center">
@@ -13,7 +15,7 @@ const TopBar = () => {
             </div>
 
             <div className="flex gap-4 items-center">
-                <p className="text-[16px]">Hello <span className="font-semibold">Paccy</span></p>
+                <p className="text-[16px]">Hello, <span className="font-semibold">{user?.name}</span></p>
                 {/* Image here */}
             </div>
 

@@ -12,6 +12,7 @@ import {
   
 } from "react-icons/md";
 import { FaSignOutAlt } from "react-icons/fa";
+import useAuthContext from "@/hooks/useAuthContext";
 
 
 
@@ -52,8 +53,13 @@ const navBarLinks = [
 
 const LeftBar = () => {
     const [isActive,setIsActive]= useState("Dashboard");
-    console.log(isActive)
-    
+
+    const {logout}= useAuthContext();
+
+    const handleLogout = ()=>{
+      logout();
+    }
+
 
   return (
     <div className="w-full min-h-screen pt-4 pb-12 flex flex-col justify-between">
@@ -88,7 +94,7 @@ const LeftBar = () => {
                 <h4>Settings</h4>
             </div>
             </Link>
-            <Link to="/login">
+            <Link onClick={handleLogout} to="/login">
             <div className="w-full flex gap-3 items-center">
                 <FaSignOutAlt fill="#4a5565"/>
                 <h4>Log out</h4>

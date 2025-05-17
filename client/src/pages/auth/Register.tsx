@@ -5,10 +5,21 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import  { registrationSchema } from "@/schema";
-
+import { register } from "@/api/auth";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { FiEye,FiEyeOff } from 'react-icons/fi'
 
 
 const Register = () => {
+  const navigate= useNavigate();
+  const [registrationFailed,setRegistrationFailed]= useState(false)
+
+   const [passwordVisible,setPasswordVisible]= useState(false);
+
+    const togglePasswordVisibility=()=>{
+      setPasswordVisible(!passwordVisible)
+    }
 
   const form = useForm<z.infer<typeof registrationSchema>>({
       resolver: zodResolver(registrationSchema),
@@ -20,10 +31,27 @@ const Register = () => {
       },
     })
    
-    // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof registrationSchema>) {
+   async function onSubmit(values: z.infer<typeof registrationSchema>) {
       
-      console.log(values)
+    try {
+      const response= await register(values.firstName,values.lastName,values.email,values.password);
+       if(response.status === 201){
+  
+        setRegistrationFailed(false)
+        alert("Registration successful");
+        navigate("/login")
+        
+       }
+       else{
+        setRegistrationFailed(true)
+        alert("Registration failed");
+       }
+
+
+      
+    } catch (error) {
+      
+    }
     }
   return (
    
@@ -86,7 +114,16 @@ const Register = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Aime123!" {...field} />
+               <div className="w-full relative flex items-center">
+                <Input 
+                type={passwordVisible ? "text" : "password"}
+                placeholder="Aime123!" {...field}
+                className=""
+                />
+                <button type="button" onClick={togglePasswordVisibility} className="absolute right-2">
+                  {passwordVisible ? <FiEyeOff /> : <FiEye />}
+                </button>
+                </div> 
               </FormControl>
               
               <FormMessage />

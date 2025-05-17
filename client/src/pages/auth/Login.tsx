@@ -6,10 +6,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { loginSchema } from "@/schema";
 import useAuthContext from "@/hooks/useAuthContext";
+import { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 
 const Login = () => {
 
+  const [passwordVisible,setPasswordVisible]= useState(false);
+  
+      const togglePasswordVisibility=()=>{
+        setPasswordVisible(!passwordVisible)
+      }
+  
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -22,7 +30,6 @@ const Login = () => {
   const {login}= useAuthContext()
   
  
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
       
@@ -61,19 +68,28 @@ const Login = () => {
           )}
         />
         <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="Aime123!" {...field} />
-              </FormControl>
-              
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                       <div className="w-full relative flex items-center">
+                        <Input 
+                        type={passwordVisible ? "text" : "password"}
+                        placeholder="Aime123!" {...field}
+                        className=""
+                        />
+                        <button type="button" onClick={togglePasswordVisibility} className="absolute right-2">
+                          {passwordVisible ? <FiEyeOff /> : <FiEye />}
+                        </button>
+                        </div> 
+                      </FormControl>
+                      
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
         <Button type="submit">Submit</Button>
       </form>
     </Form>

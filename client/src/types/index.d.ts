@@ -35,3 +35,33 @@ type LoginResponse ={
     token: string;
   };
 }
+
+type RegisterResponse ={
+  message: string;
+  status: number;
+  data:{
+    id:string;
+    firstName:string;
+    lastName:string;
+    email:string;
+    password:string;
+    role:string;
+    createdAt:string;
+    updatedAt:string;
+  }
+}
+
+export type Slot=  {
+  id:string;
+    slotNumber: string;
+    floor:number;
+    status: string;
+    type:string;
+}
+
+export type SlotsResponse ={
+  
+  message: string;
+  status: number;
+  data:Slot[];
+}
