@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { loginSchema } from "@/schema";
-
+import useAuthContext from "@/hooks/useAuthContext";
 
 
 const Login = () => {
@@ -18,11 +18,21 @@ const Login = () => {
       password: "",
     },
   })
+
+  const {login}= useAuthContext()
+  
  
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof loginSchema>) {
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    try {
+      
+      await login(values.email,values.password)
+    } catch (error) {
+      console.log(error);
+      alert("Invalid email or password")
+       
+    }
     
-    console.log(values)
   }
   return (
     <div className="flex flex-col gap-6 w-full">

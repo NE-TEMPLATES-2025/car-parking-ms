@@ -18,13 +18,16 @@ dotenv.config();
 
 const app= express();
 
+app.use(cors({
+    origin:"http://localhost:5173",
+    methods:["POST","GET","OPTIONS","DELETE","PUT","PATCH"],
+}))
+
+
+
 
 // Third-party middlewares
 
-app.use(cors({
-    methods:["POST","GET","OPTIONS","DELETE","PUT","PATCH"],
-    origin: ["http://localhost:5000"]
-}))
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(express.json())
 

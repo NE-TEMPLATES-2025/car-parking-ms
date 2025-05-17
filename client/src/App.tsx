@@ -1,28 +1,35 @@
-import { BrowserRouter as Router, Routes,Route } from 'react-router-dom'
-import AuthLayout from './layout/AuthLayout'
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
-import RootLayout from './layout/RootLayout'
-import Dashboard from './pages/Dashboard'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import AuthLayout from './layout/AuthLayout';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import RootLayout from './layout/RootLayout';
+import Dashboard from './pages/Dashboard';
+import useAuthContext from './hooks/useAuthContext';
 
 function App() {
+  const { user } = useAuthContext();
+  console.log(user);
+  
 
   return (
     <Router>
       <Routes>
-        <Route element={<AuthLayout/>}>
-        
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/register' element={<Register/>}/>
+        {/* Protected routes */}
+        <Route element={user ? <RootLayout /> : <Navigate to="/login" replace />}>
+          <Route path="/" element={<Dashboard />} />
         </Route>
 
-        <Route element={<RootLayout/>}>
-        <Route path='/' index element={<Dashboard/>}/>
+        {/* Public routes (login/register) */}
+        <Route element={!user ? <AuthLayout /> : <Navigate to="/" replace />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Route>
+
+        {/* Catch-all redirect */}
+        <Route path="*" element={<Navigate to={user ? "/" : "/login"} replace />} />
       </Routes>
     </Router>
-    
-  )
+  );
 }
 
-export default App
+export default App;
