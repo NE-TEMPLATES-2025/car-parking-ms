@@ -25,3 +25,15 @@ export const deleteParkingSlot =async(id:string)=>{
         
     }
 }
+
+export const searchSlots = async(query:string)=>{
+    try {
+        const response= await protectedApiClient.get<SlotsResponse>(`/slots/search?q=${query}`)
+        return response.data.data;
+        
+    } catch (error) {
+        console.log(error);
+        throw new Error("Failed to search slots");
+        
+    } 
+}

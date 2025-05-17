@@ -41,10 +41,29 @@ export const deleteParkingSlot= async (req:Request,res:Response)=>{
     }
 }
 
+const searchSlots= async(req:Request,res:Response)=>{
+    const {q}= req.query;
+    try {
+        const response= await parkingSlotService.searchSlots(q as string);
+        res.status(200).json(
+            ApiResponse.success("Search results",200,response)
+        )
+        
+    } catch (error:any) {
+        
+        console.log(error);
+        res.status(500).json({
+            message: "Failed to search slots",
+            error: error.message
+        })
+    }
+}
+
 const parkingSlotController= {
     createParkingSlot,
     getAllParkingSlots,
-    deleteParkingSlot
+    deleteParkingSlot,
+    searchSlots
 }
 
 export default parkingSlotController;

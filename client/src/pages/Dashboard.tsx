@@ -38,14 +38,39 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { bookParkingSessionSchema } from "@/schema";
 import type { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { Slot } from "@/types";
+import { getAllSlots } from "@/api/slots";
+import { useSearchContext } from "@/hooks/useSearchContext";
 
 const Dashboard = () => {
+ const [fetchedSlots, setSlots] = useState<Slot[]>([]);
+  const [loading, setLoading] = useState(false);
+
+    const { searchQuery } = useSearchContext();
 
   const { id:userId } = JSON.parse(localStorage.getItem("user") || "{}");
   
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
 
+
+
+
+  useEffect(() => {
+    const fetchInitialSlots = async () => {
+      setLoading(true);
+      try {
+        const response = await getAllSlots();
+        setSlots(response);
+      } catch (error) {
+        console.error("Initial fetch failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInitialSlots();
+  }, []);
   
 
   const { data: slots, isFetching: isLoading } = useGetAllParkingSlots();

@@ -61,12 +61,37 @@ export const deleteParkingSlot= async(id:string)=>{
     }
 }
 
+const searchSlots= async(query:string)=>{
+    try {
+        const searchResults= await prisma.slots.findMany({
+            where:{
+                OR:[
+                    {slotNumber: {contains:query,mode:"insensitive"}},
+                    
+                ]
+            },
+            orderBy: {
+                createdAt: "desc"
+            },
+            take:5,
+            skip:0,
+
+        })
+        return searchResults;
+    } catch (error) {
+        console.log("Error: ",error);
+        throw new Error(`Error:  ${error}`)
+        
+    }
+}
+
 
 
 const parkingSlotService= {
     createParkingSlot,
     getParkingSlots,
-    deleteParkingSlot
+    deleteParkingSlot,
+    searchSlots
 }
 
 export default parkingSlotService;

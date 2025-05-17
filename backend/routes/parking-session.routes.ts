@@ -6,9 +6,8 @@ const router= Router();
 
 
 router.post("/book",checkAuth,asyncHandler(parkingSessionController.bookParkingSession))
-router.get("/all",asyncHandler(parkingSessionController.getAllSessions))
-router.get("/pending",asyncHandler(parkingSessionController.getAllPendingSessions))
-router.put("/approve/:id",asyncHandler(parkingSessionController.approveParkingSession))
-
+router.get("/all",checkAuth,asyncHandler(parkingSessionController.getAllSessions))
+router.get("/pending",checkAuth,asyncHandler(parkingSessionController.getAllPendingSessions))
+router.put("/approve/:id",checkAuth,asyncHandler(parkingSessionController.approveParkingSession))
 
 export default router;
