@@ -144,7 +144,22 @@ exports.Prisma.SlotsScalarFieldEnum = {
   status: 'status',
   floor: 'floor',
   type: 'type',
+  unitPrice: 'unitPrice',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.ParkingSessionScalarFieldEnum = {
+  id: 'id',
+  slotId: 'slotId',
+  userId: 'userId',
+  date: 'date',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  duration: 'duration',
+  totalFee: 'totalFee',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  status: 'status'
 };
 
 exports.Prisma.SortOrder = {
@@ -172,10 +187,18 @@ exports.ESlotType = exports.$Enums.ESlotType = {
   EV: 'EV'
 };
 
+exports.EParkingStatus = exports.$Enums.EParkingStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  COMPLETED: 'COMPLETED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Vehicles: 'Vehicles',
-  Slots: 'Slots'
+  Slots: 'Slots',
+  ParkingSession: 'ParkingSession'
 };
 
 /**

@@ -24,6 +24,13 @@ enum ESlotType {
   EV
 }
 
+enum EParkingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
 model User {
   id        String   @id @default(uuid())
   firstName String   @map("first_name")
@@ -34,7 +41,8 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updatedAt")
 
-  vehicles Vehicles[]
+  vehicles       Vehicles[]
+  parkingSession ParkingSession[]
 
   @@map("users")
 }
@@ -61,8 +69,32 @@ model Slots {
   status     ESlotStatus @map("slot_status")
   floor      Int         @map("floor")
   type       ESlotType   @map("slot_type")
+  unitPrice  Int         @default(0) @map("price")
+
+  parkingSession ParkingSession[]
 
   createdAt DateTime @default(now())
 
   @@map("parking_slots")
+}
+
+model ParkingSession {
+  id     Int    @id @default(autoincrement())
+  slotId String
+  slot   Slots  @relation(fields: [slotId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  date      DateTime
+  startTime String
+  endTime   String
+  duration  Int
+  totalFee  Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  status EParkingStatus @map("status")
+
+  @@map("parking_sessions")
 }

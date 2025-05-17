@@ -13,7 +13,6 @@ interface DecodedToken{
 }
 
 export const checkAuth= async(req:CustomRequest,res:Response,next:NextFunction)=>{
-
     try {
         const authHeader= req.headers.authorization;
 
@@ -42,8 +41,6 @@ export const checkAuth= async(req:CustomRequest,res:Response,next:NextFunction)=
     }
 
 }
-
-
 
 export const checkAdmin= async(req:CustomRequest,res:Response,next:NextFunction)=>{
 

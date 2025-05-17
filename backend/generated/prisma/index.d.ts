@@ -28,6 +28,11 @@ export type Vehicles = $Result.DefaultSelection<Prisma.$VehiclesPayload>
  * 
  */
 export type Slots = $Result.DefaultSelection<Prisma.$SlotsPayload>
+/**
+ * Model ParkingSession
+ * 
+ */
+export type ParkingSession = $Result.DefaultSelection<Prisma.$ParkingSessionPayload>
 
 /**
  * Enums
@@ -57,6 +62,16 @@ export const ESlotType: {
 
 export type ESlotType = (typeof ESlotType)[keyof typeof ESlotType]
 
+
+export const EParkingStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  COMPLETED: 'COMPLETED'
+};
+
+export type EParkingStatus = (typeof EParkingStatus)[keyof typeof EParkingStatus]
+
 }
 
 export type EROLE = $Enums.EROLE
@@ -70,6 +85,10 @@ export const ESlotStatus: typeof $Enums.ESlotStatus
 export type ESlotType = $Enums.ESlotType
 
 export const ESlotType: typeof $Enums.ESlotType
+
+export type EParkingStatus = $Enums.EParkingStatus
+
+export const EParkingStatus: typeof $Enums.EParkingStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -225,6 +244,16 @@ export class PrismaClient<
     * ```
     */
   get slots(): Prisma.SlotsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.parkingSession`: Exposes CRUD operations for the **ParkingSession** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ParkingSessions
+    * const parkingSessions = await prisma.parkingSession.findMany()
+    * ```
+    */
+  get parkingSession(): Prisma.ParkingSessionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -667,7 +696,8 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Vehicles: 'Vehicles',
-    Slots: 'Slots'
+    Slots: 'Slots',
+    ParkingSession: 'ParkingSession'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -686,7 +716,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "vehicles" | "slots"
+      modelProps: "user" | "vehicles" | "slots" | "parkingSession"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -912,6 +942,80 @@ export namespace Prisma {
           }
         }
       }
+      ParkingSession: {
+        payload: Prisma.$ParkingSessionPayload<ExtArgs>
+        fields: Prisma.ParkingSessionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ParkingSessionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ParkingSessionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload>
+          }
+          findFirst: {
+            args: Prisma.ParkingSessionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ParkingSessionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload>
+          }
+          findMany: {
+            args: Prisma.ParkingSessionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload>[]
+          }
+          create: {
+            args: Prisma.ParkingSessionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload>
+          }
+          createMany: {
+            args: Prisma.ParkingSessionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ParkingSessionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload>[]
+          }
+          delete: {
+            args: Prisma.ParkingSessionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload>
+          }
+          update: {
+            args: Prisma.ParkingSessionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ParkingSessionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ParkingSessionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ParkingSessionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload>[]
+          }
+          upsert: {
+            args: Prisma.ParkingSessionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParkingSessionPayload>
+          }
+          aggregate: {
+            args: Prisma.ParkingSessionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateParkingSession>
+          }
+          groupBy: {
+            args: Prisma.ParkingSessionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ParkingSessionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ParkingSessionCountArgs<ExtArgs>
+            result: $Utils.Optional<ParkingSessionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -999,6 +1103,7 @@ export namespace Prisma {
     user?: UserOmit
     vehicles?: VehiclesOmit
     slots?: SlotsOmit
+    parkingSession?: ParkingSessionOmit
   }
 
   /* Types for Logging */
@@ -1094,10 +1199,12 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     vehicles: number
+    parkingSession: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     vehicles?: boolean | UserCountOutputTypeCountVehiclesArgs
+    parkingSession?: boolean | UserCountOutputTypeCountParkingSessionArgs
   }
 
   // Custom InputTypes
@@ -1116,6 +1223,44 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountVehiclesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: VehiclesWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountParkingSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ParkingSessionWhereInput
+  }
+
+
+  /**
+   * Count Type SlotsCountOutputType
+   */
+
+  export type SlotsCountOutputType = {
+    parkingSession: number
+  }
+
+  export type SlotsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parkingSession?: boolean | SlotsCountOutputTypeCountParkingSessionArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SlotsCountOutputType without action
+   */
+  export type SlotsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlotsCountOutputType
+     */
+    select?: SlotsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SlotsCountOutputType without action
+   */
+  export type SlotsCountOutputTypeCountParkingSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ParkingSessionWhereInput
   }
 
 
@@ -1312,6 +1457,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     vehicles?: boolean | User$vehiclesArgs<ExtArgs>
+    parkingSession?: boolean | User$parkingSessionArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1351,6 +1497,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "password" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     vehicles?: boolean | User$vehiclesArgs<ExtArgs>
+    parkingSession?: boolean | User$parkingSessionArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1360,6 +1507,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       vehicles: Prisma.$VehiclesPayload<ExtArgs>[]
+      parkingSession: Prisma.$ParkingSessionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1765,6 +1913,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     vehicles<T extends User$vehiclesArgs<ExtArgs> = {}>(args?: Subset<T, User$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VehiclesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    parkingSession<T extends User$parkingSessionArgs<ExtArgs> = {}>(args?: Subset<T, User$parkingSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2211,6 +2360,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: VehiclesScalarFieldEnum | VehiclesScalarFieldEnum[]
+  }
+
+  /**
+   * User.parkingSession
+   */
+  export type User$parkingSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    where?: ParkingSessionWhereInput
+    orderBy?: ParkingSessionOrderByWithRelationInput | ParkingSessionOrderByWithRelationInput[]
+    cursor?: ParkingSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ParkingSessionScalarFieldEnum | ParkingSessionScalarFieldEnum[]
   }
 
   /**
@@ -3330,10 +3503,12 @@ export namespace Prisma {
 
   export type SlotsAvgAggregateOutputType = {
     floor: number | null
+    unitPrice: number | null
   }
 
   export type SlotsSumAggregateOutputType = {
     floor: number | null
+    unitPrice: number | null
   }
 
   export type SlotsMinAggregateOutputType = {
@@ -3342,6 +3517,7 @@ export namespace Prisma {
     status: $Enums.ESlotStatus | null
     floor: number | null
     type: $Enums.ESlotType | null
+    unitPrice: number | null
     createdAt: Date | null
   }
 
@@ -3351,6 +3527,7 @@ export namespace Prisma {
     status: $Enums.ESlotStatus | null
     floor: number | null
     type: $Enums.ESlotType | null
+    unitPrice: number | null
     createdAt: Date | null
   }
 
@@ -3360,6 +3537,7 @@ export namespace Prisma {
     status: number
     floor: number
     type: number
+    unitPrice: number
     createdAt: number
     _all: number
   }
@@ -3367,10 +3545,12 @@ export namespace Prisma {
 
   export type SlotsAvgAggregateInputType = {
     floor?: true
+    unitPrice?: true
   }
 
   export type SlotsSumAggregateInputType = {
     floor?: true
+    unitPrice?: true
   }
 
   export type SlotsMinAggregateInputType = {
@@ -3379,6 +3559,7 @@ export namespace Prisma {
     status?: true
     floor?: true
     type?: true
+    unitPrice?: true
     createdAt?: true
   }
 
@@ -3388,6 +3569,7 @@ export namespace Prisma {
     status?: true
     floor?: true
     type?: true
+    unitPrice?: true
     createdAt?: true
   }
 
@@ -3397,6 +3579,7 @@ export namespace Prisma {
     status?: true
     floor?: true
     type?: true
+    unitPrice?: true
     createdAt?: true
     _all?: true
   }
@@ -3493,6 +3676,7 @@ export namespace Prisma {
     status: $Enums.ESlotStatus
     floor: number
     type: $Enums.ESlotType
+    unitPrice: number
     createdAt: Date
     _count: SlotsCountAggregateOutputType | null
     _avg: SlotsAvgAggregateOutputType | null
@@ -3521,7 +3705,10 @@ export namespace Prisma {
     status?: boolean
     floor?: boolean
     type?: boolean
+    unitPrice?: boolean
     createdAt?: boolean
+    parkingSession?: boolean | Slots$parkingSessionArgs<ExtArgs>
+    _count?: boolean | SlotsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["slots"]>
 
   export type SlotsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3530,6 +3717,7 @@ export namespace Prisma {
     status?: boolean
     floor?: boolean
     type?: boolean
+    unitPrice?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["slots"]>
 
@@ -3539,6 +3727,7 @@ export namespace Prisma {
     status?: boolean
     floor?: boolean
     type?: boolean
+    unitPrice?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["slots"]>
 
@@ -3548,20 +3737,30 @@ export namespace Prisma {
     status?: boolean
     floor?: boolean
     type?: boolean
+    unitPrice?: boolean
     createdAt?: boolean
   }
 
-  export type SlotsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slotNumber" | "status" | "floor" | "type" | "createdAt", ExtArgs["result"]["slots"]>
+  export type SlotsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slotNumber" | "status" | "floor" | "type" | "unitPrice" | "createdAt", ExtArgs["result"]["slots"]>
+  export type SlotsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parkingSession?: boolean | Slots$parkingSessionArgs<ExtArgs>
+    _count?: boolean | SlotsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SlotsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type SlotsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $SlotsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Slots"
-    objects: {}
+    objects: {
+      parkingSession: Prisma.$ParkingSessionPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       slotNumber: string
       status: $Enums.ESlotStatus
       floor: number
       type: $Enums.ESlotType
+      unitPrice: number
       createdAt: Date
     }, ExtArgs["result"]["slots"]>
     composites: {}
@@ -3957,6 +4156,7 @@ export namespace Prisma {
    */
   export interface Prisma__SlotsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    parkingSession<T extends Slots$parkingSessionArgs<ExtArgs> = {}>(args?: Subset<T, Slots$parkingSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3991,6 +4191,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Slots", 'ESlotStatus'>
     readonly floor: FieldRef<"Slots", 'Int'>
     readonly type: FieldRef<"Slots", 'ESlotType'>
+    readonly unitPrice: FieldRef<"Slots", 'Int'>
     readonly createdAt: FieldRef<"Slots", 'DateTime'>
   }
     
@@ -4008,6 +4209,10 @@ export namespace Prisma {
      * Omit specific fields from the Slots
      */
     omit?: SlotsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SlotsInclude<ExtArgs> | null
     /**
      * Filter, which Slots to fetch.
      */
@@ -4027,6 +4232,10 @@ export namespace Prisma {
      */
     omit?: SlotsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SlotsInclude<ExtArgs> | null
+    /**
      * Filter, which Slots to fetch.
      */
     where: SlotsWhereUniqueInput
@@ -4044,6 +4253,10 @@ export namespace Prisma {
      * Omit specific fields from the Slots
      */
     omit?: SlotsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SlotsInclude<ExtArgs> | null
     /**
      * Filter, which Slots to fetch.
      */
@@ -4093,6 +4306,10 @@ export namespace Prisma {
      */
     omit?: SlotsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SlotsInclude<ExtArgs> | null
+    /**
      * Filter, which Slots to fetch.
      */
     where?: SlotsWhereInput
@@ -4141,6 +4358,10 @@ export namespace Prisma {
      */
     omit?: SlotsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SlotsInclude<ExtArgs> | null
+    /**
      * Filter, which Slots to fetch.
      */
     where?: SlotsWhereInput
@@ -4183,6 +4404,10 @@ export namespace Prisma {
      * Omit specific fields from the Slots
      */
     omit?: SlotsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SlotsInclude<ExtArgs> | null
     /**
      * The data needed to create a Slots.
      */
@@ -4231,6 +4456,10 @@ export namespace Prisma {
      * Omit specific fields from the Slots
      */
     omit?: SlotsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SlotsInclude<ExtArgs> | null
     /**
      * The data needed to update a Slots.
      */
@@ -4298,6 +4527,10 @@ export namespace Prisma {
      */
     omit?: SlotsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SlotsInclude<ExtArgs> | null
+    /**
      * The filter to search for the Slots to update in case it exists.
      */
     where: SlotsWhereUniqueInput
@@ -4324,6 +4557,10 @@ export namespace Prisma {
      */
     omit?: SlotsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SlotsInclude<ExtArgs> | null
+    /**
      * Filter which Slots to delete.
      */
     where: SlotsWhereUniqueInput
@@ -4344,6 +4581,30 @@ export namespace Prisma {
   }
 
   /**
+   * Slots.parkingSession
+   */
+  export type Slots$parkingSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    where?: ParkingSessionWhereInput
+    orderBy?: ParkingSessionOrderByWithRelationInput | ParkingSessionOrderByWithRelationInput[]
+    cursor?: ParkingSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ParkingSessionScalarFieldEnum | ParkingSessionScalarFieldEnum[]
+  }
+
+  /**
    * Slots without action
    */
   export type SlotsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4355,6 +4616,1196 @@ export namespace Prisma {
      * Omit specific fields from the Slots
      */
     omit?: SlotsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SlotsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ParkingSession
+   */
+
+  export type AggregateParkingSession = {
+    _count: ParkingSessionCountAggregateOutputType | null
+    _avg: ParkingSessionAvgAggregateOutputType | null
+    _sum: ParkingSessionSumAggregateOutputType | null
+    _min: ParkingSessionMinAggregateOutputType | null
+    _max: ParkingSessionMaxAggregateOutputType | null
+  }
+
+  export type ParkingSessionAvgAggregateOutputType = {
+    id: number | null
+    duration: number | null
+    totalFee: number | null
+  }
+
+  export type ParkingSessionSumAggregateOutputType = {
+    id: number | null
+    duration: number | null
+    totalFee: number | null
+  }
+
+  export type ParkingSessionMinAggregateOutputType = {
+    id: number | null
+    slotId: string | null
+    userId: string | null
+    date: Date | null
+    startTime: string | null
+    endTime: string | null
+    duration: number | null
+    totalFee: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    status: $Enums.EParkingStatus | null
+  }
+
+  export type ParkingSessionMaxAggregateOutputType = {
+    id: number | null
+    slotId: string | null
+    userId: string | null
+    date: Date | null
+    startTime: string | null
+    endTime: string | null
+    duration: number | null
+    totalFee: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    status: $Enums.EParkingStatus | null
+  }
+
+  export type ParkingSessionCountAggregateOutputType = {
+    id: number
+    slotId: number
+    userId: number
+    date: number
+    startTime: number
+    endTime: number
+    duration: number
+    totalFee: number
+    createdAt: number
+    updatedAt: number
+    status: number
+    _all: number
+  }
+
+
+  export type ParkingSessionAvgAggregateInputType = {
+    id?: true
+    duration?: true
+    totalFee?: true
+  }
+
+  export type ParkingSessionSumAggregateInputType = {
+    id?: true
+    duration?: true
+    totalFee?: true
+  }
+
+  export type ParkingSessionMinAggregateInputType = {
+    id?: true
+    slotId?: true
+    userId?: true
+    date?: true
+    startTime?: true
+    endTime?: true
+    duration?: true
+    totalFee?: true
+    createdAt?: true
+    updatedAt?: true
+    status?: true
+  }
+
+  export type ParkingSessionMaxAggregateInputType = {
+    id?: true
+    slotId?: true
+    userId?: true
+    date?: true
+    startTime?: true
+    endTime?: true
+    duration?: true
+    totalFee?: true
+    createdAt?: true
+    updatedAt?: true
+    status?: true
+  }
+
+  export type ParkingSessionCountAggregateInputType = {
+    id?: true
+    slotId?: true
+    userId?: true
+    date?: true
+    startTime?: true
+    endTime?: true
+    duration?: true
+    totalFee?: true
+    createdAt?: true
+    updatedAt?: true
+    status?: true
+    _all?: true
+  }
+
+  export type ParkingSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ParkingSession to aggregate.
+     */
+    where?: ParkingSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ParkingSessions to fetch.
+     */
+    orderBy?: ParkingSessionOrderByWithRelationInput | ParkingSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ParkingSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ParkingSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ParkingSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ParkingSessions
+    **/
+    _count?: true | ParkingSessionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ParkingSessionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ParkingSessionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ParkingSessionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ParkingSessionMaxAggregateInputType
+  }
+
+  export type GetParkingSessionAggregateType<T extends ParkingSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateParkingSession]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateParkingSession[P]>
+      : GetScalarType<T[P], AggregateParkingSession[P]>
+  }
+
+
+
+
+  export type ParkingSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ParkingSessionWhereInput
+    orderBy?: ParkingSessionOrderByWithAggregationInput | ParkingSessionOrderByWithAggregationInput[]
+    by: ParkingSessionScalarFieldEnum[] | ParkingSessionScalarFieldEnum
+    having?: ParkingSessionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ParkingSessionCountAggregateInputType | true
+    _avg?: ParkingSessionAvgAggregateInputType
+    _sum?: ParkingSessionSumAggregateInputType
+    _min?: ParkingSessionMinAggregateInputType
+    _max?: ParkingSessionMaxAggregateInputType
+  }
+
+  export type ParkingSessionGroupByOutputType = {
+    id: number
+    slotId: string
+    userId: string
+    date: Date
+    startTime: string
+    endTime: string
+    duration: number
+    totalFee: number
+    createdAt: Date
+    updatedAt: Date
+    status: $Enums.EParkingStatus
+    _count: ParkingSessionCountAggregateOutputType | null
+    _avg: ParkingSessionAvgAggregateOutputType | null
+    _sum: ParkingSessionSumAggregateOutputType | null
+    _min: ParkingSessionMinAggregateOutputType | null
+    _max: ParkingSessionMaxAggregateOutputType | null
+  }
+
+  type GetParkingSessionGroupByPayload<T extends ParkingSessionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ParkingSessionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ParkingSessionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ParkingSessionGroupByOutputType[P]>
+            : GetScalarType<T[P], ParkingSessionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ParkingSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slotId?: boolean
+    userId?: boolean
+    date?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    duration?: boolean
+    totalFee?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    status?: boolean
+    slot?: boolean | SlotsDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["parkingSession"]>
+
+  export type ParkingSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slotId?: boolean
+    userId?: boolean
+    date?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    duration?: boolean
+    totalFee?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    status?: boolean
+    slot?: boolean | SlotsDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["parkingSession"]>
+
+  export type ParkingSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slotId?: boolean
+    userId?: boolean
+    date?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    duration?: boolean
+    totalFee?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    status?: boolean
+    slot?: boolean | SlotsDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["parkingSession"]>
+
+  export type ParkingSessionSelectScalar = {
+    id?: boolean
+    slotId?: boolean
+    userId?: boolean
+    date?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    duration?: boolean
+    totalFee?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    status?: boolean
+  }
+
+  export type ParkingSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slotId" | "userId" | "date" | "startTime" | "endTime" | "duration" | "totalFee" | "createdAt" | "updatedAt" | "status", ExtArgs["result"]["parkingSession"]>
+  export type ParkingSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    slot?: boolean | SlotsDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ParkingSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    slot?: boolean | SlotsDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ParkingSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    slot?: boolean | SlotsDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ParkingSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ParkingSession"
+    objects: {
+      slot: Prisma.$SlotsPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      slotId: string
+      userId: string
+      date: Date
+      startTime: string
+      endTime: string
+      duration: number
+      totalFee: number
+      createdAt: Date
+      updatedAt: Date
+      status: $Enums.EParkingStatus
+    }, ExtArgs["result"]["parkingSession"]>
+    composites: {}
+  }
+
+  type ParkingSessionGetPayload<S extends boolean | null | undefined | ParkingSessionDefaultArgs> = $Result.GetResult<Prisma.$ParkingSessionPayload, S>
+
+  type ParkingSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ParkingSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ParkingSessionCountAggregateInputType | true
+    }
+
+  export interface ParkingSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ParkingSession'], meta: { name: 'ParkingSession' } }
+    /**
+     * Find zero or one ParkingSession that matches the filter.
+     * @param {ParkingSessionFindUniqueArgs} args - Arguments to find a ParkingSession
+     * @example
+     * // Get one ParkingSession
+     * const parkingSession = await prisma.parkingSession.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ParkingSessionFindUniqueArgs>(args: SelectSubset<T, ParkingSessionFindUniqueArgs<ExtArgs>>): Prisma__ParkingSessionClient<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ParkingSession that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ParkingSessionFindUniqueOrThrowArgs} args - Arguments to find a ParkingSession
+     * @example
+     * // Get one ParkingSession
+     * const parkingSession = await prisma.parkingSession.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ParkingSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, ParkingSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ParkingSessionClient<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ParkingSession that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParkingSessionFindFirstArgs} args - Arguments to find a ParkingSession
+     * @example
+     * // Get one ParkingSession
+     * const parkingSession = await prisma.parkingSession.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ParkingSessionFindFirstArgs>(args?: SelectSubset<T, ParkingSessionFindFirstArgs<ExtArgs>>): Prisma__ParkingSessionClient<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ParkingSession that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParkingSessionFindFirstOrThrowArgs} args - Arguments to find a ParkingSession
+     * @example
+     * // Get one ParkingSession
+     * const parkingSession = await prisma.parkingSession.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ParkingSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, ParkingSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ParkingSessionClient<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ParkingSessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParkingSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ParkingSessions
+     * const parkingSessions = await prisma.parkingSession.findMany()
+     * 
+     * // Get first 10 ParkingSessions
+     * const parkingSessions = await prisma.parkingSession.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const parkingSessionWithIdOnly = await prisma.parkingSession.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ParkingSessionFindManyArgs>(args?: SelectSubset<T, ParkingSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ParkingSession.
+     * @param {ParkingSessionCreateArgs} args - Arguments to create a ParkingSession.
+     * @example
+     * // Create one ParkingSession
+     * const ParkingSession = await prisma.parkingSession.create({
+     *   data: {
+     *     // ... data to create a ParkingSession
+     *   }
+     * })
+     * 
+     */
+    create<T extends ParkingSessionCreateArgs>(args: SelectSubset<T, ParkingSessionCreateArgs<ExtArgs>>): Prisma__ParkingSessionClient<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ParkingSessions.
+     * @param {ParkingSessionCreateManyArgs} args - Arguments to create many ParkingSessions.
+     * @example
+     * // Create many ParkingSessions
+     * const parkingSession = await prisma.parkingSession.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ParkingSessionCreateManyArgs>(args?: SelectSubset<T, ParkingSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ParkingSessions and returns the data saved in the database.
+     * @param {ParkingSessionCreateManyAndReturnArgs} args - Arguments to create many ParkingSessions.
+     * @example
+     * // Create many ParkingSessions
+     * const parkingSession = await prisma.parkingSession.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ParkingSessions and only return the `id`
+     * const parkingSessionWithIdOnly = await prisma.parkingSession.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ParkingSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, ParkingSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ParkingSession.
+     * @param {ParkingSessionDeleteArgs} args - Arguments to delete one ParkingSession.
+     * @example
+     * // Delete one ParkingSession
+     * const ParkingSession = await prisma.parkingSession.delete({
+     *   where: {
+     *     // ... filter to delete one ParkingSession
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ParkingSessionDeleteArgs>(args: SelectSubset<T, ParkingSessionDeleteArgs<ExtArgs>>): Prisma__ParkingSessionClient<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ParkingSession.
+     * @param {ParkingSessionUpdateArgs} args - Arguments to update one ParkingSession.
+     * @example
+     * // Update one ParkingSession
+     * const parkingSession = await prisma.parkingSession.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ParkingSessionUpdateArgs>(args: SelectSubset<T, ParkingSessionUpdateArgs<ExtArgs>>): Prisma__ParkingSessionClient<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ParkingSessions.
+     * @param {ParkingSessionDeleteManyArgs} args - Arguments to filter ParkingSessions to delete.
+     * @example
+     * // Delete a few ParkingSessions
+     * const { count } = await prisma.parkingSession.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ParkingSessionDeleteManyArgs>(args?: SelectSubset<T, ParkingSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ParkingSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParkingSessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ParkingSessions
+     * const parkingSession = await prisma.parkingSession.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ParkingSessionUpdateManyArgs>(args: SelectSubset<T, ParkingSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ParkingSessions and returns the data updated in the database.
+     * @param {ParkingSessionUpdateManyAndReturnArgs} args - Arguments to update many ParkingSessions.
+     * @example
+     * // Update many ParkingSessions
+     * const parkingSession = await prisma.parkingSession.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ParkingSessions and only return the `id`
+     * const parkingSessionWithIdOnly = await prisma.parkingSession.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ParkingSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, ParkingSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ParkingSession.
+     * @param {ParkingSessionUpsertArgs} args - Arguments to update or create a ParkingSession.
+     * @example
+     * // Update or create a ParkingSession
+     * const parkingSession = await prisma.parkingSession.upsert({
+     *   create: {
+     *     // ... data to create a ParkingSession
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ParkingSession we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ParkingSessionUpsertArgs>(args: SelectSubset<T, ParkingSessionUpsertArgs<ExtArgs>>): Prisma__ParkingSessionClient<$Result.GetResult<Prisma.$ParkingSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ParkingSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParkingSessionCountArgs} args - Arguments to filter ParkingSessions to count.
+     * @example
+     * // Count the number of ParkingSessions
+     * const count = await prisma.parkingSession.count({
+     *   where: {
+     *     // ... the filter for the ParkingSessions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ParkingSessionCountArgs>(
+      args?: Subset<T, ParkingSessionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ParkingSessionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ParkingSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParkingSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ParkingSessionAggregateArgs>(args: Subset<T, ParkingSessionAggregateArgs>): Prisma.PrismaPromise<GetParkingSessionAggregateType<T>>
+
+    /**
+     * Group by ParkingSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParkingSessionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ParkingSessionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ParkingSessionGroupByArgs['orderBy'] }
+        : { orderBy?: ParkingSessionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ParkingSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetParkingSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ParkingSession model
+   */
+  readonly fields: ParkingSessionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ParkingSession.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ParkingSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    slot<T extends SlotsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SlotsDefaultArgs<ExtArgs>>): Prisma__SlotsClient<$Result.GetResult<Prisma.$SlotsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ParkingSession model
+   */
+  interface ParkingSessionFieldRefs {
+    readonly id: FieldRef<"ParkingSession", 'Int'>
+    readonly slotId: FieldRef<"ParkingSession", 'String'>
+    readonly userId: FieldRef<"ParkingSession", 'String'>
+    readonly date: FieldRef<"ParkingSession", 'DateTime'>
+    readonly startTime: FieldRef<"ParkingSession", 'String'>
+    readonly endTime: FieldRef<"ParkingSession", 'String'>
+    readonly duration: FieldRef<"ParkingSession", 'Int'>
+    readonly totalFee: FieldRef<"ParkingSession", 'Float'>
+    readonly createdAt: FieldRef<"ParkingSession", 'DateTime'>
+    readonly updatedAt: FieldRef<"ParkingSession", 'DateTime'>
+    readonly status: FieldRef<"ParkingSession", 'EParkingStatus'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ParkingSession findUnique
+   */
+  export type ParkingSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which ParkingSession to fetch.
+     */
+    where: ParkingSessionWhereUniqueInput
+  }
+
+  /**
+   * ParkingSession findUniqueOrThrow
+   */
+  export type ParkingSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which ParkingSession to fetch.
+     */
+    where: ParkingSessionWhereUniqueInput
+  }
+
+  /**
+   * ParkingSession findFirst
+   */
+  export type ParkingSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which ParkingSession to fetch.
+     */
+    where?: ParkingSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ParkingSessions to fetch.
+     */
+    orderBy?: ParkingSessionOrderByWithRelationInput | ParkingSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ParkingSessions.
+     */
+    cursor?: ParkingSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ParkingSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ParkingSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ParkingSessions.
+     */
+    distinct?: ParkingSessionScalarFieldEnum | ParkingSessionScalarFieldEnum[]
+  }
+
+  /**
+   * ParkingSession findFirstOrThrow
+   */
+  export type ParkingSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which ParkingSession to fetch.
+     */
+    where?: ParkingSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ParkingSessions to fetch.
+     */
+    orderBy?: ParkingSessionOrderByWithRelationInput | ParkingSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ParkingSessions.
+     */
+    cursor?: ParkingSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ParkingSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ParkingSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ParkingSessions.
+     */
+    distinct?: ParkingSessionScalarFieldEnum | ParkingSessionScalarFieldEnum[]
+  }
+
+  /**
+   * ParkingSession findMany
+   */
+  export type ParkingSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which ParkingSessions to fetch.
+     */
+    where?: ParkingSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ParkingSessions to fetch.
+     */
+    orderBy?: ParkingSessionOrderByWithRelationInput | ParkingSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ParkingSessions.
+     */
+    cursor?: ParkingSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ParkingSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ParkingSessions.
+     */
+    skip?: number
+    distinct?: ParkingSessionScalarFieldEnum | ParkingSessionScalarFieldEnum[]
+  }
+
+  /**
+   * ParkingSession create
+   */
+  export type ParkingSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ParkingSession.
+     */
+    data: XOR<ParkingSessionCreateInput, ParkingSessionUncheckedCreateInput>
+  }
+
+  /**
+   * ParkingSession createMany
+   */
+  export type ParkingSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ParkingSessions.
+     */
+    data: ParkingSessionCreateManyInput | ParkingSessionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ParkingSession createManyAndReturn
+   */
+  export type ParkingSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * The data used to create many ParkingSessions.
+     */
+    data: ParkingSessionCreateManyInput | ParkingSessionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ParkingSession update
+   */
+  export type ParkingSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ParkingSession.
+     */
+    data: XOR<ParkingSessionUpdateInput, ParkingSessionUncheckedUpdateInput>
+    /**
+     * Choose, which ParkingSession to update.
+     */
+    where: ParkingSessionWhereUniqueInput
+  }
+
+  /**
+   * ParkingSession updateMany
+   */
+  export type ParkingSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ParkingSessions.
+     */
+    data: XOR<ParkingSessionUpdateManyMutationInput, ParkingSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which ParkingSessions to update
+     */
+    where?: ParkingSessionWhereInput
+    /**
+     * Limit how many ParkingSessions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ParkingSession updateManyAndReturn
+   */
+  export type ParkingSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * The data used to update ParkingSessions.
+     */
+    data: XOR<ParkingSessionUpdateManyMutationInput, ParkingSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which ParkingSessions to update
+     */
+    where?: ParkingSessionWhereInput
+    /**
+     * Limit how many ParkingSessions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ParkingSession upsert
+   */
+  export type ParkingSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ParkingSession to update in case it exists.
+     */
+    where: ParkingSessionWhereUniqueInput
+    /**
+     * In case the ParkingSession found by the `where` argument doesn't exist, create a new ParkingSession with this data.
+     */
+    create: XOR<ParkingSessionCreateInput, ParkingSessionUncheckedCreateInput>
+    /**
+     * In case the ParkingSession was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ParkingSessionUpdateInput, ParkingSessionUncheckedUpdateInput>
+  }
+
+  /**
+   * ParkingSession delete
+   */
+  export type ParkingSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
+    /**
+     * Filter which ParkingSession to delete.
+     */
+    where: ParkingSessionWhereUniqueInput
+  }
+
+  /**
+   * ParkingSession deleteMany
+   */
+  export type ParkingSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ParkingSessions to delete
+     */
+    where?: ParkingSessionWhereInput
+    /**
+     * Limit how many ParkingSessions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ParkingSession without action
+   */
+  export type ParkingSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParkingSession
+     */
+    select?: ParkingSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParkingSession
+     */
+    omit?: ParkingSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParkingSessionInclude<ExtArgs> | null
   }
 
 
@@ -4405,10 +5856,28 @@ export namespace Prisma {
     status: 'status',
     floor: 'floor',
     type: 'type',
+    unitPrice: 'unitPrice',
     createdAt: 'createdAt'
   };
 
   export type SlotsScalarFieldEnum = (typeof SlotsScalarFieldEnum)[keyof typeof SlotsScalarFieldEnum]
+
+
+  export const ParkingSessionScalarFieldEnum: {
+    id: 'id',
+    slotId: 'slotId',
+    userId: 'userId',
+    date: 'date',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    duration: 'duration',
+    totalFee: 'totalFee',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    status: 'status'
+  };
+
+  export type ParkingSessionScalarFieldEnum = (typeof ParkingSessionScalarFieldEnum)[keyof typeof ParkingSessionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -4528,6 +5997,20 @@ export namespace Prisma {
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
+
+
+  /**
+   * Reference to a field of type 'EParkingStatus'
+   */
+  export type EnumEParkingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EParkingStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'EParkingStatus[]'
+   */
+  export type ListEnumEParkingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EParkingStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -4546,6 +6029,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     vehicles?: VehiclesListRelationFilter
+    parkingSession?: ParkingSessionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -4558,6 +6042,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     vehicles?: VehiclesOrderByRelationAggregateInput
+    parkingSession?: ParkingSessionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -4573,6 +6058,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     vehicles?: VehiclesListRelationFilter
+    parkingSession?: ParkingSessionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -4677,7 +6163,9 @@ export namespace Prisma {
     status?: EnumESlotStatusFilter<"Slots"> | $Enums.ESlotStatus
     floor?: IntFilter<"Slots"> | number
     type?: EnumESlotTypeFilter<"Slots"> | $Enums.ESlotType
+    unitPrice?: IntFilter<"Slots"> | number
     createdAt?: DateTimeFilter<"Slots"> | Date | string
+    parkingSession?: ParkingSessionListRelationFilter
   }
 
   export type SlotsOrderByWithRelationInput = {
@@ -4686,7 +6174,9 @@ export namespace Prisma {
     status?: SortOrder
     floor?: SortOrder
     type?: SortOrder
+    unitPrice?: SortOrder
     createdAt?: SortOrder
+    parkingSession?: ParkingSessionOrderByRelationAggregateInput
   }
 
   export type SlotsWhereUniqueInput = Prisma.AtLeast<{
@@ -4698,7 +6188,9 @@ export namespace Prisma {
     status?: EnumESlotStatusFilter<"Slots"> | $Enums.ESlotStatus
     floor?: IntFilter<"Slots"> | number
     type?: EnumESlotTypeFilter<"Slots"> | $Enums.ESlotType
+    unitPrice?: IntFilter<"Slots"> | number
     createdAt?: DateTimeFilter<"Slots"> | Date | string
+    parkingSession?: ParkingSessionListRelationFilter
   }, "id" | "slotNumber">
 
   export type SlotsOrderByWithAggregationInput = {
@@ -4707,6 +6199,7 @@ export namespace Prisma {
     status?: SortOrder
     floor?: SortOrder
     type?: SortOrder
+    unitPrice?: SortOrder
     createdAt?: SortOrder
     _count?: SlotsCountOrderByAggregateInput
     _avg?: SlotsAvgOrderByAggregateInput
@@ -4724,7 +6217,98 @@ export namespace Prisma {
     status?: EnumESlotStatusWithAggregatesFilter<"Slots"> | $Enums.ESlotStatus
     floor?: IntWithAggregatesFilter<"Slots"> | number
     type?: EnumESlotTypeWithAggregatesFilter<"Slots"> | $Enums.ESlotType
+    unitPrice?: IntWithAggregatesFilter<"Slots"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Slots"> | Date | string
+  }
+
+  export type ParkingSessionWhereInput = {
+    AND?: ParkingSessionWhereInput | ParkingSessionWhereInput[]
+    OR?: ParkingSessionWhereInput[]
+    NOT?: ParkingSessionWhereInput | ParkingSessionWhereInput[]
+    id?: IntFilter<"ParkingSession"> | number
+    slotId?: StringFilter<"ParkingSession"> | string
+    userId?: StringFilter<"ParkingSession"> | string
+    date?: DateTimeFilter<"ParkingSession"> | Date | string
+    startTime?: StringFilter<"ParkingSession"> | string
+    endTime?: StringFilter<"ParkingSession"> | string
+    duration?: IntFilter<"ParkingSession"> | number
+    totalFee?: FloatFilter<"ParkingSession"> | number
+    createdAt?: DateTimeFilter<"ParkingSession"> | Date | string
+    updatedAt?: DateTimeFilter<"ParkingSession"> | Date | string
+    status?: EnumEParkingStatusFilter<"ParkingSession"> | $Enums.EParkingStatus
+    slot?: XOR<SlotsScalarRelationFilter, SlotsWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ParkingSessionOrderByWithRelationInput = {
+    id?: SortOrder
+    slotId?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    duration?: SortOrder
+    totalFee?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    slot?: SlotsOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ParkingSessionWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: ParkingSessionWhereInput | ParkingSessionWhereInput[]
+    OR?: ParkingSessionWhereInput[]
+    NOT?: ParkingSessionWhereInput | ParkingSessionWhereInput[]
+    slotId?: StringFilter<"ParkingSession"> | string
+    userId?: StringFilter<"ParkingSession"> | string
+    date?: DateTimeFilter<"ParkingSession"> | Date | string
+    startTime?: StringFilter<"ParkingSession"> | string
+    endTime?: StringFilter<"ParkingSession"> | string
+    duration?: IntFilter<"ParkingSession"> | number
+    totalFee?: FloatFilter<"ParkingSession"> | number
+    createdAt?: DateTimeFilter<"ParkingSession"> | Date | string
+    updatedAt?: DateTimeFilter<"ParkingSession"> | Date | string
+    status?: EnumEParkingStatusFilter<"ParkingSession"> | $Enums.EParkingStatus
+    slot?: XOR<SlotsScalarRelationFilter, SlotsWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type ParkingSessionOrderByWithAggregationInput = {
+    id?: SortOrder
+    slotId?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    duration?: SortOrder
+    totalFee?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    _count?: ParkingSessionCountOrderByAggregateInput
+    _avg?: ParkingSessionAvgOrderByAggregateInput
+    _max?: ParkingSessionMaxOrderByAggregateInput
+    _min?: ParkingSessionMinOrderByAggregateInput
+    _sum?: ParkingSessionSumOrderByAggregateInput
+  }
+
+  export type ParkingSessionScalarWhereWithAggregatesInput = {
+    AND?: ParkingSessionScalarWhereWithAggregatesInput | ParkingSessionScalarWhereWithAggregatesInput[]
+    OR?: ParkingSessionScalarWhereWithAggregatesInput[]
+    NOT?: ParkingSessionScalarWhereWithAggregatesInput | ParkingSessionScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ParkingSession"> | number
+    slotId?: StringWithAggregatesFilter<"ParkingSession"> | string
+    userId?: StringWithAggregatesFilter<"ParkingSession"> | string
+    date?: DateTimeWithAggregatesFilter<"ParkingSession"> | Date | string
+    startTime?: StringWithAggregatesFilter<"ParkingSession"> | string
+    endTime?: StringWithAggregatesFilter<"ParkingSession"> | string
+    duration?: IntWithAggregatesFilter<"ParkingSession"> | number
+    totalFee?: FloatWithAggregatesFilter<"ParkingSession"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ParkingSession"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ParkingSession"> | Date | string
+    status?: EnumEParkingStatusWithAggregatesFilter<"ParkingSession"> | $Enums.EParkingStatus
   }
 
   export type UserCreateInput = {
@@ -4737,6 +6321,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     vehicles?: VehiclesCreateNestedManyWithoutUserInput
+    parkingSession?: ParkingSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -4749,6 +6334,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     vehicles?: VehiclesUncheckedCreateNestedManyWithoutUserInput
+    parkingSession?: ParkingSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -4761,6 +6347,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vehicles?: VehiclesUpdateManyWithoutUserNestedInput
+    parkingSession?: ParkingSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -4773,6 +6360,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vehicles?: VehiclesUncheckedUpdateManyWithoutUserNestedInput
+    parkingSession?: ParkingSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -4883,7 +6471,9 @@ export namespace Prisma {
     status: $Enums.ESlotStatus
     floor: number
     type: $Enums.ESlotType
+    unitPrice?: number
     createdAt?: Date | string
+    parkingSession?: ParkingSessionCreateNestedManyWithoutSlotInput
   }
 
   export type SlotsUncheckedCreateInput = {
@@ -4892,7 +6482,9 @@ export namespace Prisma {
     status: $Enums.ESlotStatus
     floor: number
     type: $Enums.ESlotType
+    unitPrice?: number
     createdAt?: Date | string
+    parkingSession?: ParkingSessionUncheckedCreateNestedManyWithoutSlotInput
   }
 
   export type SlotsUpdateInput = {
@@ -4901,7 +6493,9 @@ export namespace Prisma {
     status?: EnumESlotStatusFieldUpdateOperationsInput | $Enums.ESlotStatus
     floor?: IntFieldUpdateOperationsInput | number
     type?: EnumESlotTypeFieldUpdateOperationsInput | $Enums.ESlotType
+    unitPrice?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parkingSession?: ParkingSessionUpdateManyWithoutSlotNestedInput
   }
 
   export type SlotsUncheckedUpdateInput = {
@@ -4910,7 +6504,9 @@ export namespace Prisma {
     status?: EnumESlotStatusFieldUpdateOperationsInput | $Enums.ESlotStatus
     floor?: IntFieldUpdateOperationsInput | number
     type?: EnumESlotTypeFieldUpdateOperationsInput | $Enums.ESlotType
+    unitPrice?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parkingSession?: ParkingSessionUncheckedUpdateManyWithoutSlotNestedInput
   }
 
   export type SlotsCreateManyInput = {
@@ -4919,6 +6515,7 @@ export namespace Prisma {
     status: $Enums.ESlotStatus
     floor: number
     type: $Enums.ESlotType
+    unitPrice?: number
     createdAt?: Date | string
   }
 
@@ -4928,6 +6525,7 @@ export namespace Prisma {
     status?: EnumESlotStatusFieldUpdateOperationsInput | $Enums.ESlotStatus
     floor?: IntFieldUpdateOperationsInput | number
     type?: EnumESlotTypeFieldUpdateOperationsInput | $Enums.ESlotType
+    unitPrice?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -4937,7 +6535,101 @@ export namespace Prisma {
     status?: EnumESlotStatusFieldUpdateOperationsInput | $Enums.ESlotStatus
     floor?: IntFieldUpdateOperationsInput | number
     type?: EnumESlotTypeFieldUpdateOperationsInput | $Enums.ESlotType
+    unitPrice?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParkingSessionCreateInput = {
+    date: Date | string
+    startTime: string
+    endTime: string
+    duration: number
+    totalFee: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status: $Enums.EParkingStatus
+    slot: SlotsCreateNestedOneWithoutParkingSessionInput
+    user: UserCreateNestedOneWithoutParkingSessionInput
+  }
+
+  export type ParkingSessionUncheckedCreateInput = {
+    id?: number
+    slotId: string
+    userId: string
+    date: Date | string
+    startTime: string
+    endTime: string
+    duration: number
+    totalFee: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status: $Enums.EParkingStatus
+  }
+
+  export type ParkingSessionUpdateInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    totalFee?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEParkingStatusFieldUpdateOperationsInput | $Enums.EParkingStatus
+    slot?: SlotsUpdateOneRequiredWithoutParkingSessionNestedInput
+    user?: UserUpdateOneRequiredWithoutParkingSessionNestedInput
+  }
+
+  export type ParkingSessionUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slotId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    totalFee?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEParkingStatusFieldUpdateOperationsInput | $Enums.EParkingStatus
+  }
+
+  export type ParkingSessionCreateManyInput = {
+    id?: number
+    slotId: string
+    userId: string
+    date: Date | string
+    startTime: string
+    endTime: string
+    duration: number
+    totalFee: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status: $Enums.EParkingStatus
+  }
+
+  export type ParkingSessionUpdateManyMutationInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    totalFee?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEParkingStatusFieldUpdateOperationsInput | $Enums.EParkingStatus
+  }
+
+  export type ParkingSessionUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slotId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    totalFee?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEParkingStatusFieldUpdateOperationsInput | $Enums.EParkingStatus
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -4979,7 +6671,17 @@ export namespace Prisma {
     none?: VehiclesWhereInput
   }
 
+  export type ParkingSessionListRelationFilter = {
+    every?: ParkingSessionWhereInput
+    some?: ParkingSessionWhereInput
+    none?: ParkingSessionWhereInput
+  }
+
   export type VehiclesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ParkingSessionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -5124,11 +6826,13 @@ export namespace Prisma {
     status?: SortOrder
     floor?: SortOrder
     type?: SortOrder
+    unitPrice?: SortOrder
     createdAt?: SortOrder
   }
 
   export type SlotsAvgOrderByAggregateInput = {
     floor?: SortOrder
+    unitPrice?: SortOrder
   }
 
   export type SlotsMaxOrderByAggregateInput = {
@@ -5137,6 +6841,7 @@ export namespace Prisma {
     status?: SortOrder
     floor?: SortOrder
     type?: SortOrder
+    unitPrice?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -5146,11 +6851,13 @@ export namespace Prisma {
     status?: SortOrder
     floor?: SortOrder
     type?: SortOrder
+    unitPrice?: SortOrder
     createdAt?: SortOrder
   }
 
   export type SlotsSumOrderByAggregateInput = {
     floor?: SortOrder
+    unitPrice?: SortOrder
   }
 
   export type EnumESlotStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -5189,6 +6896,109 @@ export namespace Prisma {
     _max?: NestedEnumESlotTypeFilter<$PrismaModel>
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type EnumEParkingStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EParkingStatus | EnumEParkingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EParkingStatus[] | ListEnumEParkingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EParkingStatus[] | ListEnumEParkingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEParkingStatusFilter<$PrismaModel> | $Enums.EParkingStatus
+  }
+
+  export type SlotsScalarRelationFilter = {
+    is?: SlotsWhereInput
+    isNot?: SlotsWhereInput
+  }
+
+  export type ParkingSessionCountOrderByAggregateInput = {
+    id?: SortOrder
+    slotId?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    duration?: SortOrder
+    totalFee?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+  }
+
+  export type ParkingSessionAvgOrderByAggregateInput = {
+    id?: SortOrder
+    duration?: SortOrder
+    totalFee?: SortOrder
+  }
+
+  export type ParkingSessionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    slotId?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    duration?: SortOrder
+    totalFee?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+  }
+
+  export type ParkingSessionMinOrderByAggregateInput = {
+    id?: SortOrder
+    slotId?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    duration?: SortOrder
+    totalFee?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+  }
+
+  export type ParkingSessionSumOrderByAggregateInput = {
+    id?: SortOrder
+    duration?: SortOrder
+    totalFee?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type EnumEParkingStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EParkingStatus | EnumEParkingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EParkingStatus[] | ListEnumEParkingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EParkingStatus[] | ListEnumEParkingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEParkingStatusWithAggregatesFilter<$PrismaModel> | $Enums.EParkingStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEParkingStatusFilter<$PrismaModel>
+    _max?: NestedEnumEParkingStatusFilter<$PrismaModel>
+  }
+
   export type VehiclesCreateNestedManyWithoutUserInput = {
     create?: XOR<VehiclesCreateWithoutUserInput, VehiclesUncheckedCreateWithoutUserInput> | VehiclesCreateWithoutUserInput[] | VehiclesUncheckedCreateWithoutUserInput[]
     connectOrCreate?: VehiclesCreateOrConnectWithoutUserInput | VehiclesCreateOrConnectWithoutUserInput[]
@@ -5196,11 +7006,25 @@ export namespace Prisma {
     connect?: VehiclesWhereUniqueInput | VehiclesWhereUniqueInput[]
   }
 
+  export type ParkingSessionCreateNestedManyWithoutUserInput = {
+    create?: XOR<ParkingSessionCreateWithoutUserInput, ParkingSessionUncheckedCreateWithoutUserInput> | ParkingSessionCreateWithoutUserInput[] | ParkingSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ParkingSessionCreateOrConnectWithoutUserInput | ParkingSessionCreateOrConnectWithoutUserInput[]
+    createMany?: ParkingSessionCreateManyUserInputEnvelope
+    connect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+  }
+
   export type VehiclesUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<VehiclesCreateWithoutUserInput, VehiclesUncheckedCreateWithoutUserInput> | VehiclesCreateWithoutUserInput[] | VehiclesUncheckedCreateWithoutUserInput[]
     connectOrCreate?: VehiclesCreateOrConnectWithoutUserInput | VehiclesCreateOrConnectWithoutUserInput[]
     createMany?: VehiclesCreateManyUserInputEnvelope
     connect?: VehiclesWhereUniqueInput | VehiclesWhereUniqueInput[]
+  }
+
+  export type ParkingSessionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ParkingSessionCreateWithoutUserInput, ParkingSessionUncheckedCreateWithoutUserInput> | ParkingSessionCreateWithoutUserInput[] | ParkingSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ParkingSessionCreateOrConnectWithoutUserInput | ParkingSessionCreateOrConnectWithoutUserInput[]
+    createMany?: ParkingSessionCreateManyUserInputEnvelope
+    connect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5229,6 +7053,20 @@ export namespace Prisma {
     deleteMany?: VehiclesScalarWhereInput | VehiclesScalarWhereInput[]
   }
 
+  export type ParkingSessionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ParkingSessionCreateWithoutUserInput, ParkingSessionUncheckedCreateWithoutUserInput> | ParkingSessionCreateWithoutUserInput[] | ParkingSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ParkingSessionCreateOrConnectWithoutUserInput | ParkingSessionCreateOrConnectWithoutUserInput[]
+    upsert?: ParkingSessionUpsertWithWhereUniqueWithoutUserInput | ParkingSessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ParkingSessionCreateManyUserInputEnvelope
+    set?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    disconnect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    delete?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    connect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    update?: ParkingSessionUpdateWithWhereUniqueWithoutUserInput | ParkingSessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ParkingSessionUpdateManyWithWhereWithoutUserInput | ParkingSessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ParkingSessionScalarWhereInput | ParkingSessionScalarWhereInput[]
+  }
+
   export type VehiclesUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<VehiclesCreateWithoutUserInput, VehiclesUncheckedCreateWithoutUserInput> | VehiclesCreateWithoutUserInput[] | VehiclesUncheckedCreateWithoutUserInput[]
     connectOrCreate?: VehiclesCreateOrConnectWithoutUserInput | VehiclesCreateOrConnectWithoutUserInput[]
@@ -5241,6 +7079,20 @@ export namespace Prisma {
     update?: VehiclesUpdateWithWhereUniqueWithoutUserInput | VehiclesUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: VehiclesUpdateManyWithWhereWithoutUserInput | VehiclesUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: VehiclesScalarWhereInput | VehiclesScalarWhereInput[]
+  }
+
+  export type ParkingSessionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ParkingSessionCreateWithoutUserInput, ParkingSessionUncheckedCreateWithoutUserInput> | ParkingSessionCreateWithoutUserInput[] | ParkingSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ParkingSessionCreateOrConnectWithoutUserInput | ParkingSessionCreateOrConnectWithoutUserInput[]
+    upsert?: ParkingSessionUpsertWithWhereUniqueWithoutUserInput | ParkingSessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ParkingSessionCreateManyUserInputEnvelope
+    set?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    disconnect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    delete?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    connect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    update?: ParkingSessionUpdateWithWhereUniqueWithoutUserInput | ParkingSessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ParkingSessionUpdateManyWithWhereWithoutUserInput | ParkingSessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ParkingSessionScalarWhereInput | ParkingSessionScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutVehiclesInput = {
@@ -5257,6 +7109,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVehiclesInput, UserUpdateWithoutVehiclesInput>, UserUncheckedUpdateWithoutVehiclesInput>
   }
 
+  export type ParkingSessionCreateNestedManyWithoutSlotInput = {
+    create?: XOR<ParkingSessionCreateWithoutSlotInput, ParkingSessionUncheckedCreateWithoutSlotInput> | ParkingSessionCreateWithoutSlotInput[] | ParkingSessionUncheckedCreateWithoutSlotInput[]
+    connectOrCreate?: ParkingSessionCreateOrConnectWithoutSlotInput | ParkingSessionCreateOrConnectWithoutSlotInput[]
+    createMany?: ParkingSessionCreateManySlotInputEnvelope
+    connect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+  }
+
+  export type ParkingSessionUncheckedCreateNestedManyWithoutSlotInput = {
+    create?: XOR<ParkingSessionCreateWithoutSlotInput, ParkingSessionUncheckedCreateWithoutSlotInput> | ParkingSessionCreateWithoutSlotInput[] | ParkingSessionUncheckedCreateWithoutSlotInput[]
+    connectOrCreate?: ParkingSessionCreateOrConnectWithoutSlotInput | ParkingSessionCreateOrConnectWithoutSlotInput[]
+    createMany?: ParkingSessionCreateManySlotInputEnvelope
+    connect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+  }
+
   export type EnumESlotStatusFieldUpdateOperationsInput = {
     set?: $Enums.ESlotStatus
   }
@@ -5271,6 +7137,74 @@ export namespace Prisma {
 
   export type EnumESlotTypeFieldUpdateOperationsInput = {
     set?: $Enums.ESlotType
+  }
+
+  export type ParkingSessionUpdateManyWithoutSlotNestedInput = {
+    create?: XOR<ParkingSessionCreateWithoutSlotInput, ParkingSessionUncheckedCreateWithoutSlotInput> | ParkingSessionCreateWithoutSlotInput[] | ParkingSessionUncheckedCreateWithoutSlotInput[]
+    connectOrCreate?: ParkingSessionCreateOrConnectWithoutSlotInput | ParkingSessionCreateOrConnectWithoutSlotInput[]
+    upsert?: ParkingSessionUpsertWithWhereUniqueWithoutSlotInput | ParkingSessionUpsertWithWhereUniqueWithoutSlotInput[]
+    createMany?: ParkingSessionCreateManySlotInputEnvelope
+    set?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    disconnect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    delete?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    connect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    update?: ParkingSessionUpdateWithWhereUniqueWithoutSlotInput | ParkingSessionUpdateWithWhereUniqueWithoutSlotInput[]
+    updateMany?: ParkingSessionUpdateManyWithWhereWithoutSlotInput | ParkingSessionUpdateManyWithWhereWithoutSlotInput[]
+    deleteMany?: ParkingSessionScalarWhereInput | ParkingSessionScalarWhereInput[]
+  }
+
+  export type ParkingSessionUncheckedUpdateManyWithoutSlotNestedInput = {
+    create?: XOR<ParkingSessionCreateWithoutSlotInput, ParkingSessionUncheckedCreateWithoutSlotInput> | ParkingSessionCreateWithoutSlotInput[] | ParkingSessionUncheckedCreateWithoutSlotInput[]
+    connectOrCreate?: ParkingSessionCreateOrConnectWithoutSlotInput | ParkingSessionCreateOrConnectWithoutSlotInput[]
+    upsert?: ParkingSessionUpsertWithWhereUniqueWithoutSlotInput | ParkingSessionUpsertWithWhereUniqueWithoutSlotInput[]
+    createMany?: ParkingSessionCreateManySlotInputEnvelope
+    set?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    disconnect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    delete?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    connect?: ParkingSessionWhereUniqueInput | ParkingSessionWhereUniqueInput[]
+    update?: ParkingSessionUpdateWithWhereUniqueWithoutSlotInput | ParkingSessionUpdateWithWhereUniqueWithoutSlotInput[]
+    updateMany?: ParkingSessionUpdateManyWithWhereWithoutSlotInput | ParkingSessionUpdateManyWithWhereWithoutSlotInput[]
+    deleteMany?: ParkingSessionScalarWhereInput | ParkingSessionScalarWhereInput[]
+  }
+
+  export type SlotsCreateNestedOneWithoutParkingSessionInput = {
+    create?: XOR<SlotsCreateWithoutParkingSessionInput, SlotsUncheckedCreateWithoutParkingSessionInput>
+    connectOrCreate?: SlotsCreateOrConnectWithoutParkingSessionInput
+    connect?: SlotsWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutParkingSessionInput = {
+    create?: XOR<UserCreateWithoutParkingSessionInput, UserUncheckedCreateWithoutParkingSessionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutParkingSessionInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type EnumEParkingStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EParkingStatus
+  }
+
+  export type SlotsUpdateOneRequiredWithoutParkingSessionNestedInput = {
+    create?: XOR<SlotsCreateWithoutParkingSessionInput, SlotsUncheckedCreateWithoutParkingSessionInput>
+    connectOrCreate?: SlotsCreateOrConnectWithoutParkingSessionInput
+    upsert?: SlotsUpsertWithoutParkingSessionInput
+    connect?: SlotsWhereUniqueInput
+    update?: XOR<XOR<SlotsUpdateToOneWithWhereWithoutParkingSessionInput, SlotsUpdateWithoutParkingSessionInput>, SlotsUncheckedUpdateWithoutParkingSessionInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutParkingSessionNestedInput = {
+    create?: XOR<UserCreateWithoutParkingSessionInput, UserUncheckedCreateWithoutParkingSessionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutParkingSessionInput
+    upsert?: UserUpsertWithoutParkingSessionInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutParkingSessionInput, UserUpdateWithoutParkingSessionInput>, UserUncheckedUpdateWithoutParkingSessionInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -5418,6 +7352,39 @@ export namespace Prisma {
     _max?: NestedEnumESlotTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumEParkingStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EParkingStatus | EnumEParkingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EParkingStatus[] | ListEnumEParkingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EParkingStatus[] | ListEnumEParkingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEParkingStatusFilter<$PrismaModel> | $Enums.EParkingStatus
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedEnumEParkingStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EParkingStatus | EnumEParkingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EParkingStatus[] | ListEnumEParkingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EParkingStatus[] | ListEnumEParkingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEParkingStatusWithAggregatesFilter<$PrismaModel> | $Enums.EParkingStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEParkingStatusFilter<$PrismaModel>
+    _max?: NestedEnumEParkingStatusFilter<$PrismaModel>
+  }
+
   export type VehiclesCreateWithoutUserInput = {
     id?: string
     plateNumber: string
@@ -5443,6 +7410,41 @@ export namespace Prisma {
 
   export type VehiclesCreateManyUserInputEnvelope = {
     data: VehiclesCreateManyUserInput | VehiclesCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ParkingSessionCreateWithoutUserInput = {
+    date: Date | string
+    startTime: string
+    endTime: string
+    duration: number
+    totalFee: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status: $Enums.EParkingStatus
+    slot: SlotsCreateNestedOneWithoutParkingSessionInput
+  }
+
+  export type ParkingSessionUncheckedCreateWithoutUserInput = {
+    id?: number
+    slotId: string
+    date: Date | string
+    startTime: string
+    endTime: string
+    duration: number
+    totalFee: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status: $Enums.EParkingStatus
+  }
+
+  export type ParkingSessionCreateOrConnectWithoutUserInput = {
+    where: ParkingSessionWhereUniqueInput
+    create: XOR<ParkingSessionCreateWithoutUserInput, ParkingSessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type ParkingSessionCreateManyUserInputEnvelope = {
+    data: ParkingSessionCreateManyUserInput | ParkingSessionCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -5475,6 +7477,39 @@ export namespace Prisma {
     userId?: StringFilter<"Vehicles"> | string
   }
 
+  export type ParkingSessionUpsertWithWhereUniqueWithoutUserInput = {
+    where: ParkingSessionWhereUniqueInput
+    update: XOR<ParkingSessionUpdateWithoutUserInput, ParkingSessionUncheckedUpdateWithoutUserInput>
+    create: XOR<ParkingSessionCreateWithoutUserInput, ParkingSessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type ParkingSessionUpdateWithWhereUniqueWithoutUserInput = {
+    where: ParkingSessionWhereUniqueInput
+    data: XOR<ParkingSessionUpdateWithoutUserInput, ParkingSessionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ParkingSessionUpdateManyWithWhereWithoutUserInput = {
+    where: ParkingSessionScalarWhereInput
+    data: XOR<ParkingSessionUpdateManyMutationInput, ParkingSessionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ParkingSessionScalarWhereInput = {
+    AND?: ParkingSessionScalarWhereInput | ParkingSessionScalarWhereInput[]
+    OR?: ParkingSessionScalarWhereInput[]
+    NOT?: ParkingSessionScalarWhereInput | ParkingSessionScalarWhereInput[]
+    id?: IntFilter<"ParkingSession"> | number
+    slotId?: StringFilter<"ParkingSession"> | string
+    userId?: StringFilter<"ParkingSession"> | string
+    date?: DateTimeFilter<"ParkingSession"> | Date | string
+    startTime?: StringFilter<"ParkingSession"> | string
+    endTime?: StringFilter<"ParkingSession"> | string
+    duration?: IntFilter<"ParkingSession"> | number
+    totalFee?: FloatFilter<"ParkingSession"> | number
+    createdAt?: DateTimeFilter<"ParkingSession"> | Date | string
+    updatedAt?: DateTimeFilter<"ParkingSession"> | Date | string
+    status?: EnumEParkingStatusFilter<"ParkingSession"> | $Enums.EParkingStatus
+  }
+
   export type UserCreateWithoutVehiclesInput = {
     id?: string
     firstName: string
@@ -5484,6 +7519,7 @@ export namespace Prisma {
     role: $Enums.EROLE
     createdAt?: Date | string
     updatedAt?: Date | string
+    parkingSession?: ParkingSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVehiclesInput = {
@@ -5495,6 +7531,7 @@ export namespace Prisma {
     role: $Enums.EROLE
     createdAt?: Date | string
     updatedAt?: Date | string
+    parkingSession?: ParkingSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVehiclesInput = {
@@ -5522,6 +7559,7 @@ export namespace Prisma {
     role?: EnumEROLEFieldUpdateOperationsInput | $Enums.EROLE
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parkingSession?: ParkingSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVehiclesInput = {
@@ -5533,6 +7571,178 @@ export namespace Prisma {
     role?: EnumEROLEFieldUpdateOperationsInput | $Enums.EROLE
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parkingSession?: ParkingSessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ParkingSessionCreateWithoutSlotInput = {
+    date: Date | string
+    startTime: string
+    endTime: string
+    duration: number
+    totalFee: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status: $Enums.EParkingStatus
+    user: UserCreateNestedOneWithoutParkingSessionInput
+  }
+
+  export type ParkingSessionUncheckedCreateWithoutSlotInput = {
+    id?: number
+    userId: string
+    date: Date | string
+    startTime: string
+    endTime: string
+    duration: number
+    totalFee: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status: $Enums.EParkingStatus
+  }
+
+  export type ParkingSessionCreateOrConnectWithoutSlotInput = {
+    where: ParkingSessionWhereUniqueInput
+    create: XOR<ParkingSessionCreateWithoutSlotInput, ParkingSessionUncheckedCreateWithoutSlotInput>
+  }
+
+  export type ParkingSessionCreateManySlotInputEnvelope = {
+    data: ParkingSessionCreateManySlotInput | ParkingSessionCreateManySlotInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ParkingSessionUpsertWithWhereUniqueWithoutSlotInput = {
+    where: ParkingSessionWhereUniqueInput
+    update: XOR<ParkingSessionUpdateWithoutSlotInput, ParkingSessionUncheckedUpdateWithoutSlotInput>
+    create: XOR<ParkingSessionCreateWithoutSlotInput, ParkingSessionUncheckedCreateWithoutSlotInput>
+  }
+
+  export type ParkingSessionUpdateWithWhereUniqueWithoutSlotInput = {
+    where: ParkingSessionWhereUniqueInput
+    data: XOR<ParkingSessionUpdateWithoutSlotInput, ParkingSessionUncheckedUpdateWithoutSlotInput>
+  }
+
+  export type ParkingSessionUpdateManyWithWhereWithoutSlotInput = {
+    where: ParkingSessionScalarWhereInput
+    data: XOR<ParkingSessionUpdateManyMutationInput, ParkingSessionUncheckedUpdateManyWithoutSlotInput>
+  }
+
+  export type SlotsCreateWithoutParkingSessionInput = {
+    id?: string
+    slotNumber: string
+    status: $Enums.ESlotStatus
+    floor: number
+    type: $Enums.ESlotType
+    unitPrice?: number
+    createdAt?: Date | string
+  }
+
+  export type SlotsUncheckedCreateWithoutParkingSessionInput = {
+    id?: string
+    slotNumber: string
+    status: $Enums.ESlotStatus
+    floor: number
+    type: $Enums.ESlotType
+    unitPrice?: number
+    createdAt?: Date | string
+  }
+
+  export type SlotsCreateOrConnectWithoutParkingSessionInput = {
+    where: SlotsWhereUniqueInput
+    create: XOR<SlotsCreateWithoutParkingSessionInput, SlotsUncheckedCreateWithoutParkingSessionInput>
+  }
+
+  export type UserCreateWithoutParkingSessionInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    role: $Enums.EROLE
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    vehicles?: VehiclesCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutParkingSessionInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    role: $Enums.EROLE
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    vehicles?: VehiclesUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutParkingSessionInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutParkingSessionInput, UserUncheckedCreateWithoutParkingSessionInput>
+  }
+
+  export type SlotsUpsertWithoutParkingSessionInput = {
+    update: XOR<SlotsUpdateWithoutParkingSessionInput, SlotsUncheckedUpdateWithoutParkingSessionInput>
+    create: XOR<SlotsCreateWithoutParkingSessionInput, SlotsUncheckedCreateWithoutParkingSessionInput>
+    where?: SlotsWhereInput
+  }
+
+  export type SlotsUpdateToOneWithWhereWithoutParkingSessionInput = {
+    where?: SlotsWhereInput
+    data: XOR<SlotsUpdateWithoutParkingSessionInput, SlotsUncheckedUpdateWithoutParkingSessionInput>
+  }
+
+  export type SlotsUpdateWithoutParkingSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slotNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumESlotStatusFieldUpdateOperationsInput | $Enums.ESlotStatus
+    floor?: IntFieldUpdateOperationsInput | number
+    type?: EnumESlotTypeFieldUpdateOperationsInput | $Enums.ESlotType
+    unitPrice?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SlotsUncheckedUpdateWithoutParkingSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slotNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumESlotStatusFieldUpdateOperationsInput | $Enums.ESlotStatus
+    floor?: IntFieldUpdateOperationsInput | number
+    type?: EnumESlotTypeFieldUpdateOperationsInput | $Enums.ESlotType
+    unitPrice?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutParkingSessionInput = {
+    update: XOR<UserUpdateWithoutParkingSessionInput, UserUncheckedUpdateWithoutParkingSessionInput>
+    create: XOR<UserCreateWithoutParkingSessionInput, UserUncheckedCreateWithoutParkingSessionInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutParkingSessionInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutParkingSessionInput, UserUncheckedUpdateWithoutParkingSessionInput>
+  }
+
+  export type UserUpdateWithoutParkingSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumEROLEFieldUpdateOperationsInput | $Enums.EROLE
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vehicles?: VehiclesUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutParkingSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumEROLEFieldUpdateOperationsInput | $Enums.EROLE
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vehicles?: VehiclesUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type VehiclesCreateManyUserInput = {
@@ -5542,6 +7752,19 @@ export namespace Prisma {
     model: string
     color: string
     createdAt?: Date | string
+  }
+
+  export type ParkingSessionCreateManyUserInput = {
+    id?: number
+    slotId: string
+    date: Date | string
+    startTime: string
+    endTime: string
+    duration: number
+    totalFee: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status: $Enums.EParkingStatus
   }
 
   export type VehiclesUpdateWithoutUserInput = {
@@ -5569,6 +7792,95 @@ export namespace Prisma {
     model?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParkingSessionUpdateWithoutUserInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    totalFee?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEParkingStatusFieldUpdateOperationsInput | $Enums.EParkingStatus
+    slot?: SlotsUpdateOneRequiredWithoutParkingSessionNestedInput
+  }
+
+  export type ParkingSessionUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slotId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    totalFee?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEParkingStatusFieldUpdateOperationsInput | $Enums.EParkingStatus
+  }
+
+  export type ParkingSessionUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slotId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    totalFee?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEParkingStatusFieldUpdateOperationsInput | $Enums.EParkingStatus
+  }
+
+  export type ParkingSessionCreateManySlotInput = {
+    id?: number
+    userId: string
+    date: Date | string
+    startTime: string
+    endTime: string
+    duration: number
+    totalFee: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status: $Enums.EParkingStatus
+  }
+
+  export type ParkingSessionUpdateWithoutSlotInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    totalFee?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEParkingStatusFieldUpdateOperationsInput | $Enums.EParkingStatus
+    user?: UserUpdateOneRequiredWithoutParkingSessionNestedInput
+  }
+
+  export type ParkingSessionUncheckedUpdateWithoutSlotInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    totalFee?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEParkingStatusFieldUpdateOperationsInput | $Enums.EParkingStatus
+  }
+
+  export type ParkingSessionUncheckedUpdateManyWithoutSlotInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    totalFee?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEParkingStatusFieldUpdateOperationsInput | $Enums.EParkingStatus
   }
 
 

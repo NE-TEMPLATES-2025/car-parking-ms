@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import userRouter from "./routes/user.routes"
 import adminRouter from "./routes/admin.routes"
 import authRouter from "./routes/auth.routes"
+import parkingSessionRouter from './routes/parking-session.routes'
 import vehicleRouter from "./routes/vehicle.routes"
 import parkingSlotRouter from './routes/slots.routes'
 import swaggerUi from 'swagger-ui-express'
@@ -25,12 +26,10 @@ app.use(cors({
 
 
 
-
 // Third-party middlewares
 
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(express.json())
-
 
 
 // Route middlewares
@@ -40,6 +39,7 @@ app.use("/api/v1/admin",adminRouter)
 app.use("/api/v1/auth",authRouter)
 app.use("/api/v1/vehicle",vehicleRouter)
 app.use("/api/v1/slots",parkingSlotRouter)
+app.use("/api/v1/parking",parkingSessionRouter)
 
 
 // Swagger endpoint

@@ -7,8 +7,9 @@ export const createParkingSlot= async(createParkingSlotDto:CreateParkingSlotDto)
         const parkingSlot= await  prisma.slots.create({
             data:{
                 ...createParkingSlotDto,
+                unitPrice: createParkingSlotDto.unitPrice,
                 status: "AVAILABLE",
-                type: "CAR"
+                type: "CAR",
 
             }
         })
