@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { MdDownload } from "react-icons/md";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import toast from "react-hot-toast";
 import {
   Table,
@@ -40,78 +47,71 @@ import type { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import type { Slot } from "@/types";
-import { getAllSlots } from "@/api/slots";
 import { useSearchContext } from "@/hooks/useSearchContext";
+import { searchSlots } from "@/api/slots";
 
 const Dashboard = () => {
- const [fetchedSlots, setSlots] = useState<Slot[]>([]);
+  const [fetchedSlots, setSlots] = useState<Slot[]>([]);
   const [loading, setLoading] = useState(false);
 
-    const { searchQuery } = useSearchContext();
-
-  const { id:userId } = JSON.parse(localStorage.getItem("user") || "{}");
+  const { searchQuery } = useSearchContext();
+  console.log("SearchQuuery",searchQuery);
   
+
+  const { id: userId } = JSON.parse(localStorage.getItem("user") || "{}");
+
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
 
-
-
-
   useEffect(() => {
-    const fetchInitialSlots = async () => {
+    const fetchSearchResults = async () => {
+      if (!searchQuery.trim()) return;
       setLoading(true);
       try {
-        const response = await getAllSlots();
-        setSlots(response);
+        const results = await searchSlots(searchQuery);
+        setSlots(results);
       } catch (error) {
-        console.error("Initial fetch failed:", error);
+        console.error("Search failed:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchInitialSlots();
-  }, []);
-  
+    fetchSearchResults();
+  }, [searchQuery]);
 
   const { data: slots, isFetching: isLoading } = useGetAllParkingSlots();
-  const { mutateAsync: deleteSlot} = useDeleteParkingSlotMutation();
+  const { mutateAsync: deleteSlot } = useDeleteParkingSlotMutation();
   const { mutate: bookSlot } = useBookParkingSlotMutation();
 
+  const form = useForm<z.infer<typeof bookParkingSessionSchema>>({
+    resolver: zodResolver(bookParkingSessionSchema),
+    defaultValues: {
+      userId: "",
+      slotId: "",
+      date: "",
+      startTime: "",
+      endTime: "",
+    },
+  });
 
-   const form = useForm<z.infer<typeof bookParkingSessionSchema>>({
-      resolver: zodResolver(bookParkingSessionSchema),
-      defaultValues: {
-     
-        userId: "",
-        slotId: "",
-        date:"",
-        startTime: "",
-        endTime: "",
-      },
-    })
-  
-  
-    
-   
   async function onSubmit(values: z.infer<typeof bookParkingSessionSchema>) {
-  if (!selectedSlotId || !userId) return;
+    if (!selectedSlotId || !userId) return;
 
-  try {
-    bookSlot({
-      ...values,
-      userId,
-      slotId: selectedSlotId,
-    });
+    try {
+      bookSlot({
+        ...values,
+        userId,
+        slotId: selectedSlotId,
+      });
 
-    toast.success("Parking slot booked successfully!");
-    form.reset(); // Reset form
-    setSelectedSlotId(null); // Close dialog
-  } catch (error) {
-    console.error(error);
-    toast.error("Failed to book the slot.");
+      toast.success("Parking slot booked successfully!");
+      form.reset(); // Reset form
+      setSelectedSlotId(null); // Close dialog
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to book the slot.");
+    }
   }
-}
-
 
   return (
     <>
@@ -217,18 +217,27 @@ const Dashboard = () => {
             <p className="text-sm text-gray-600 text-center">Loading...</p>
           )}
 
-         <Table>
-  <TableHeader>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Slot Number</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Floor</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead className="text-center">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+             <TableBody>
+  {(searchQuery.trim() ? fetchedSlots : slots)?.length === 0 ? (
     <TableRow>
-      <TableHead>Slot Number</TableHead>
-      <TableHead>Status</TableHead>
-      <TableHead>Floor</TableHead>
-      <TableHead>Type</TableHead>
-      <TableHead className="text-center">Action</TableHead>
+      <TableCell colSpan={5} className="text-center text-gray-500">
+        {searchQuery.trim()
+          ? "No matching slots found."
+          : "No slots available."}
+      </TableCell>
     </TableRow>
-  </TableHeader>
-  <TableBody>
-    {slots?.map((slot) => (
+  ) : (
+    (searchQuery.trim() ? fetchedSlots : slots)?.map((slot) => (
       <TableRow key={slot.slotNumber}>
         <TableCell>{slot.slotNumber}</TableCell>
         <TableCell>{slot.status}</TableCell>
@@ -237,83 +246,101 @@ const Dashboard = () => {
         <TableCell>
           <div className="flex justify-center items-center gap-3">
             {slot.status === "AVAILABLE" && (
-              <Dialog onOpenChange={(open) => !open && setSelectedSlotId(null)}>
-                <DialogTrigger asChild>
-                  <Button
-                    className="bg-blue-600 text-white rounded-lg px-4 py-2 cursor-pointer"
-                    onClick={() => setSelectedSlotId(slot.id)}
-                  >
-                    Book
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="z-50 bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-md mx-auto">
-                  <DialogHeader>
-                    <DialogTitle className="text-lg font-semibold">
-                      Book a Slot
-                    </DialogTitle>
-                    <DialogDescription className="text-sm text-gray-500 mt-1 mb-4">
-                      Fill in the details to request booking for this slot.
-                    </DialogDescription>
-                  </DialogHeader>
+             
+<div className="flex justify-center items-center gap-3">
+                      {slot.status === "AVAILABLE" && (
+                        <Dialog
+                          onOpenChange={(open) =>
+                            !open && setSelectedSlotId(null)
+                          }
+                        >
+                          <DialogTrigger asChild>
+                            <Button
+                              className="bg-blue-600 text-white rounded-lg px-4 py-2 cursor-pointer"
+                              onClick={() => setSelectedSlotId(slot.id)}
+                            >
+                              Book
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="z-50 bg-white dark:bg-gray-900 p-6 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-md mx-auto">
+                            <DialogHeader>
+                              <DialogTitle className="text-lg font-semibold">
+                                Book a Slot
+                              </DialogTitle>
+                              <DialogDescription className="text-sm text-gray-500 mt-1 mb-4">
+                                Fill in the details to request booking for this
+                                slot.
+                              </DialogDescription>
+                            </DialogHeader>
 
-                  <Form {...form}>
-                    <form
-                      onSubmit={form.handleSubmit(onSubmit)}
-                      className="space-y-6"
-                    >
-                      <FormField
-                        control={form.control}
-                        name="date"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                            <Form {...form}>
+                              <form
+                                onSubmit={form.handleSubmit(onSubmit)}
+                                className="space-y-6"
+                              >
+                                <FormField
+                                  control={form.control}
+                                  name="date"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel>Date</FormLabel>
+                                      <FormControl>
+                                        <Input type="date" {...field} />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
 
-                      <FormField
-                        control={form.control}
-                        name="startTime"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Start Time</FormLabel>
-                            <FormControl>
-                              <Input type="time" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                                <FormField
+                                  control={form.control}
+                                  name="startTime"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel>Start Time</FormLabel>
+                                      <FormControl>
+                                        <Input type="time" {...field} />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
 
-                      <FormField
-                        control={form.control}
-                        name="endTime"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>End Time</FormLabel>
-                            <FormControl>
-                              <Input type="time" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                                <FormField
+                                  control={form.control}
+                                  name="endTime"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel>End Time</FormLabel>
+                                      <FormControl>
+                                        <Input type="time" {...field} />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+
+                                <Button
+                                  type="submit"
+                                  disabled={isLoading}
+                                  className="w-full"
+                                >
+                                  {isLoading ? "Booking..." : "Request Now"}
+                                </Button>
+                              </form>
+                            </Form>
+                          </DialogContent>
+                        </Dialog>
+                      )}
 
                       <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full"
+                        onClick={() => deleteSlot(slot.id)}
+                        className="bg-red-600 text-white rounded-lg px-4 py-2 cursor-pointer"
                       >
-                        {isLoading ? "Booking..." : "Request Now"}
+                        Delete
                       </Button>
-                    </form>
-                  </Form>
-                </DialogContent>
-              </Dialog>
+                    </div>
+
             )}
 
             <Button
@@ -325,10 +352,11 @@ const Dashboard = () => {
           </div>
         </TableCell>
       </TableRow>
-    ))}
-  </TableBody>
-</Table>
+    ))
+  )}
+</TableBody>
 
+          </Table>
 
           <Pagination>
             <PaginationContent>
@@ -353,3 +381,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
+
