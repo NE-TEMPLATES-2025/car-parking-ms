@@ -55,9 +55,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
 
   const { searchQuery } = useSearchContext();
-  console.log("SearchQuuery",searchQuery);
   
-
   const { id: userId } = JSON.parse(localStorage.getItem("user") || "{}");
 
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);

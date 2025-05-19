@@ -10,7 +10,6 @@ import vehicleRouter from "./routes/vehicle.routes"
 import parkingSlotRouter from './routes/slots.routes'
 import swaggerUi from 'swagger-ui-express'
 import swaggerDoc from "./swagger/swagger.json"
-import { setupSwagger } from "./swagger/config";
 
 
 
@@ -41,10 +40,7 @@ app.use("/api/v1/vehicle",vehicleRouter)
 app.use("/api/v1/slots",parkingSlotRouter)
 app.use("/api/v1/parking",parkingSessionRouter)
 
-
-// Swagger endpoint
-
-setupSwagger(app);
+app.use("/api/v1/docs",swaggerUi.serve,swaggerUi.setup(swaggerDoc))
 
 app.listen(process.env.PORT,()=>{
 console.log(`app running on port ${process.env.PORT} `)
