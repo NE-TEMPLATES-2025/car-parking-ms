@@ -1,19 +1,26 @@
-import swaggerJSDoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
-import { Express } from "express";
+import swaggerAutogen from "swagger-autogen";
 
-const options = {
+const doc = {
   definition: {
     openapi: "3.0.0",
+    host: "http://localhost:4000",
+    basePath: "/api/v1/",
+    consumes:["application/json"],
+    produces:["application/json"],
     info: {
       title: "Car Parking Management System",
       version: "1.0.0",
       description: "APIs for managing car parks including slots, vehicles, users, etc...",
     },
-    servers: [
-      {
-        url: "http://localhost:5000/api/v1/",
-      },
+     tags: [
+        {
+            name: 'Auth',
+            description: 'Authentication endpoints'
+        },
+        {
+            name: 'Users',
+            description: 'Users endpoints'
+        },
     ],
     components: {
   securitySchemes: {
@@ -29,12 +36,11 @@ security: [
     bearerAuth: [],
   },
 ],
-  },
-  apis: ["./routes/*.ts"], // all your route files
+  }
 };
 
-const swaggerSpec = swaggerJSDoc(options);
 
-export const setupSwagger = (app: Express) => {
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-};
+const outputFile = './swagger.json';
+
+const routes=["../routes/admin.routes","../routes/auth.routes","../routes/parking-session.routes","../routes/slots.routes","../routes/user.routes","../routes/vehicle.routes"]
+swaggerAutogen(outputFile,routes,doc)
